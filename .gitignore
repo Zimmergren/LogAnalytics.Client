@@ -1,0 +1,7 @@
+obj/
+bin/
+packages/
+*.pubxml.user
+*.csproj.user
+.vs/
+node_modules
