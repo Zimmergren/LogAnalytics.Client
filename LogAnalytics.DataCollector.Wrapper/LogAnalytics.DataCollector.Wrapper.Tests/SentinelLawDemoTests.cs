@@ -11,8 +11,8 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
         // You should grab these variables from Key Vault, 
         // Credential Store on your machine, 
         // or some other non-code related location that is defined by secure boundraries
-        private string workspaceId = "<workspace id>";
-        private string sharedKey = "<shared key>";
+        private string workspaceId = "e9000011-9795-45a6-a550-c9df0e496dd5";
+        private string sharedKey = "3Pm01PgiVR/xx7sKw0+cV3LyV69/IZQZGDkRG4mqHcedUvb/SyvAxcz39k+uKzaDuTtlyxw13VyoZt4vh3q+eQ==";
 
         [TestMethod]
         public void SendDemoEvents_Test()
@@ -34,7 +34,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
                 });
             }
 
-            logger.SendLogEntries(securityEntities, "tzsecurity");
+            logger.SendLogEntries(securityEntities, "tzsecurity").Wait();
 
             // AUDIT EVENTS (Sample/Demo code only)
             List<TZAuditEvent> auditEntities = new List<TZAuditEvent>();
@@ -49,7 +49,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
                 });
             }
 
-            logger.SendLogEntries(auditEntities, "tzaudit");
+            logger.SendLogEntries(auditEntities, "tzaudit").Wait();
         }
 
         private string GetSeverity(int seed)

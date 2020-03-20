@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace LogAnalytics.DataCollector.Wrapper
 {
@@ -15,6 +16,9 @@ namespace LogAnalytics.DataCollector.Wrapper
         private string WorkspaceId { get; }
         private string SharedKey { get; }
         private string RequestBaseUrl { get; }
+
+        // You might want to implement your own disposing patterns, or use a static httpClient instead. Use cases vary depending on how you'd be using the code.
+        private readonly HttpClient httpClient;
 
         public LogAnalyticsWrapper(string workspaceId, string sharedKey)
         {
@@ -27,9 +31,11 @@ namespace LogAnalytics.DataCollector.Wrapper
             WorkspaceId = workspaceId;
             SharedKey = sharedKey;
             RequestBaseUrl = $"https://{WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
+
+            httpClient = new HttpClient();
         }
 
-        public void SendLogEntry<T>(T entity, string logType)
+        public async Task SendLogEntry<T>(T entity, string logType)
         {
             #region Argument validation
 
@@ -47,9 +53,10 @@ namespace LogAnalytics.DataCollector.Wrapper
             #endregion
 
             List<T> list = new List<T> {entity};
-            SendLogEntries(list, logType);
+            await SendLogEntries(list, logType).ConfigureAwait(false);
         }
-        public void SendLogEntries<T>(List<T> entities, string logType)
+
+        public async Task SendLogEntries<T>(List<T> entities, string logType)
         {
             #region Argument validation
 
@@ -72,20 +79,19 @@ namespace LogAnalytics.DataCollector.Wrapper
             var entityAsJson = JsonConvert.SerializeObject(entities);
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
 
-            HttpClient client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("Authorization", authSignature);
-            client.DefaultRequestHeaders.Add("Log-Type", logType);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("x-ms-date", dateTimeNow);
-            client.DefaultRequestHeaders.Add("time-generated-field", ""); // if we want to extend this in the future to support custom date fields from the entity etc.
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("Authorization", authSignature);
+            httpClient.DefaultRequestHeaders.Add("Log-Type", logType);
+            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            httpClient.DefaultRequestHeaders.Add("x-ms-date", dateTimeNow);
+            httpClient.DefaultRequestHeaders.Add("time-generated-field", ""); // if we want to extend this in the future to support custom date fields from the entity etc.
 
             HttpContent httpContent = new StringContent(entityAsJson, Encoding.UTF8);
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            HttpResponseMessage response = client.PostAsync(new Uri(RequestBaseUrl), httpContent).Result;
+            HttpResponseMessage response = await httpClient.PostAsync(new Uri(RequestBaseUrl), httpContent).ConfigureAwait(false);
 
             HttpContent responseContent = response.Content;
-            string result = responseContent.ReadAsStringAsync().Result;
+            string result = await responseContent.ReadAsStringAsync().ConfigureAwait(false);
             // helpful todo: if you want to return the data, this might be a good place to start working with it...
         }
 

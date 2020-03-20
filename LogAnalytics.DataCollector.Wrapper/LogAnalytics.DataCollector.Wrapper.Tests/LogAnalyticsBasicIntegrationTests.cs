@@ -36,7 +36,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
                 TestDateTime = DateTime.UtcNow,
                 TestDouble = 2.1,
                 TestGuid = Guid.NewGuid()
-            }, "demolog");
+            }, "demolog").Wait();
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
 
             // after this is sent, wait a couple of minutes and then check your Log Analytics dashboard.
             // todo: if you want a true integration test, wait for it here, then query the logs from code and verify that the entries are there, then assert the test.
-            logger.SendLogEntries(entities, "demolog");
+            logger.SendLogEntries(entities, "demolog").Wait();
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
                 });
             }
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => logger.SendLogEntries(entities, "testlog"));
+            Assert.ThrowsException<AggregateException>(() => logger.SendLogEntries(entities, "testlog").Wait());
         }
 
         private string GetCategory()

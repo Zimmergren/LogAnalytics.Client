@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LogAnalytics.DataCollector.Wrapper
 {
     interface ILogAnalyticsWrapper
     {
-        void SendLogEntry<T>(T entity, string logType);
-        void SendLogEntries<T>(List<T> entities, string logType);
+        Task SendLogEntry<T>(T entity, string logType);
+        Task SendLogEntries<T>(List<T> entities, string logType);
     }
 }
