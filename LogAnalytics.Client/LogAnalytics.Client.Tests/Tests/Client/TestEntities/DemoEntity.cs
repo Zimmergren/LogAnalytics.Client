@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LogAnalytics.DataCollector.Wrapper.Tests.TestEntities
+﻿namespace LogAnalytics.Client.Tests.TestEntities
 {
     public class DemoEntity
     {

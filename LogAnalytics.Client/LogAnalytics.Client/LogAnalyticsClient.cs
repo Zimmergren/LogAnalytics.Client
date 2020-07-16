@@ -9,9 +9,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace LogAnalytics.DataCollector.Wrapper
+namespace LogAnalytics.Client
 {
-    public class LogAnalyticsWrapper : ILogAnalyticsWrapper
+    public class LogAnalyticsClient : ILogAnalyticsClient
     {
         private string WorkspaceId { get; }
         private string SharedKey { get; }
@@ -20,7 +20,7 @@ namespace LogAnalytics.DataCollector.Wrapper
         // You might want to implement your own disposing patterns, or use a static httpClient instead. Use cases vary depending on how you'd be using the code.
         private readonly HttpClient httpClient;
 
-        public LogAnalyticsWrapper(string workspaceId, string sharedKey)
+        public LogAnalyticsClient(string workspaceId, string sharedKey)
         {
             if (string.IsNullOrEmpty(workspaceId))
                 throw new ArgumentNullException(nameof(workspaceId), "workspaceId cannot be null or empty");
@@ -52,7 +52,7 @@ namespace LogAnalytics.DataCollector.Wrapper
 
             #endregion
 
-            List<T> list = new List<T> {entity};
+            List<T> list = new List<T> { entity };
             await SendLogEntries(list, logType).ConfigureAwait(false);
         }
 
@@ -63,10 +63,10 @@ namespace LogAnalytics.DataCollector.Wrapper
             if (entities == null)
                 throw new NullReferenceException("parameter 'entities' cannot be null");
 
-            if (logType.Length>100)
+            if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
 
-            if(!IsAlphaOnly(logType))
+            if (!IsAlphaOnly(logType))
                 throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain alpha characters. It does not support numerics or special characters.");
 
             foreach (var entity in entities)
@@ -75,7 +75,7 @@ namespace LogAnalytics.DataCollector.Wrapper
             #endregion
 
             var dateTimeNow = DateTime.UtcNow.ToString("r");
-            
+
             var entityAsJson = JsonConvert.SerializeObject(entities);
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
 
@@ -96,7 +96,7 @@ namespace LogAnalytics.DataCollector.Wrapper
         }
 
         #region Helpers
-        
+
         private string GetAuthSignature(string serializedJsonObject, string dateString)
         {
             string stringToSign = $"POST\n{serializedJsonObject.Length}\napplication/json\nx-ms-date:{dateString}\n/api/logs";
