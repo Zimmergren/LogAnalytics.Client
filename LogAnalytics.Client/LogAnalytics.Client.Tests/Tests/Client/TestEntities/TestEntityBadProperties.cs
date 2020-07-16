@@ -1,4 +1,4 @@
-﻿namespace LogAnalytics.DataCollector.Wrapper.Tests.TestEntities
+﻿namespace LogAnalytics.Client.Tests.TestEntities
 {
     public class TestEntityBadProperties
     {

@@ -1,30 +1,33 @@
+using LogAnalytics.Client.Tests.TestEntities;
+using LogAnalyticsClient.Tests.Helpers;
+using LogAnalyticsClient.Tests.Tests;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using LogAnalytics.DataCollector.Wrapper.Tests.TestEntities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LogAnalytics.DataCollector.Wrapper.Tests
+namespace LogAnalytics.Client.Tests
 {
+    /// <summary>
+    /// Basic tests for the LogAnalyticsClient.
+    /// </summary>
     [TestClass]
-    public class LogAnalyticsBasicIntegrationTests
+    public class LogAnalyticsClientTests : TestsBase
     {
-        /*
-         Disclaimer and notes: 
-            This wrapper is currently not unit tested nor integration tested properly.
-            In order to use this in another project, please ensure proper code coverage and unit- and integration testing. 
-            Feel free to submit a PR to the github repo too.
-         */
+        private static LawSecrets _secrets;
 
-        // You should grab these variables from Key Vault, Credential Store on your machine, local config files or some other non-code related location :)
-        private string workspaceId = "";
-        private string sharedKey = "";
+        [ClassInitialize]
+        public static void ClassInit(TestContext context)
+        {
+            _secrets = InitSecrets();
+        }
 
         [TestMethod]
         public void SendLogMessageTest()
         {
-            LogAnalyticsWrapper logger = new LogAnalyticsWrapper(
-                workspaceId: workspaceId,
-                sharedKey: sharedKey);
+            LogAnalyticsClient logger = new LogAnalyticsClient(
+                workspaceId: _secrets.LawId,
+                sharedKey: _secrets.LawKey);
 
             // after this is sent, wait a couple of minutes and then check your Log Analytics dashboard.
             // todo: if you want a true integration test, wait for it here, then query the logs from code and verify that the entries are there, then assert the test.
@@ -42,9 +45,9 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
         [TestMethod]
         public void SendDemoEntities_Test()
         {
-            LogAnalyticsWrapper logger = new LogAnalyticsWrapper(
-                workspaceId: workspaceId,
-                sharedKey: sharedKey);
+            LogAnalyticsClient logger = new LogAnalyticsClient(
+                workspaceId: _secrets.LawId,
+                sharedKey: _secrets.LawKey);
 
             List<DemoEntity> entities = new List<DemoEntity>();
             for (int ii = 0; ii < 5000; ii++)
@@ -54,7 +57,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
                     Criticality = GetCriticality(),
                     Message = "lorem ipsum dolor sit amet",
                     SystemSource = GetSystemSource()
-                } );
+                });
             }
 
             // after this is sent, wait a couple of minutes and then check your Log Analytics dashboard.
@@ -65,9 +68,9 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
         [TestMethod]
         public void SendBadEntity_Test()
         {
-            LogAnalyticsWrapper logger = new LogAnalyticsWrapper(
-                workspaceId: workspaceId,
-                sharedKey: sharedKey);
+            LogAnalyticsClient logger = new LogAnalyticsClient(
+                workspaceId: _secrets.LawId,
+                sharedKey: _secrets.LawKey);
 
             List<TestEntityBadProperties> entities = new List<TestEntityBadProperties>();
             for (int ii = 0; ii < 1; ii++)
@@ -87,9 +90,9 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
 
         private string GetCategory()
         {
-            var categories = new []{"DevOps", "Development", "Management", "Administration", "IR", "HR"};
-            int rnd = new Random().Next(0,categories.Length);
-            
+            var categories = new[] { "DevOps", "Development", "Management", "Administration", "IR", "HR" };
+            int rnd = new Random().Next(0, categories.Length);
+
             return categories[rnd];
         }
         private string GetCriticality()
@@ -103,7 +106,7 @@ namespace LogAnalytics.DataCollector.Wrapper.Tests
         {
             var categories = new[] { "Search Index Runner", "Analysis Runner", "Discovery Engine", "Magical Unicorn Code Box", "Amazing Apples" };
             int rnd = new Random().Next(0, categories.Length);
-          
+
             return categories[rnd];
         }
     }

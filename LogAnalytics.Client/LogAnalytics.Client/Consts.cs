@@ -1,4 +1,4 @@
-﻿namespace LogAnalytics.DataCollector.Wrapper
+﻿namespace LogAnalytics.Client
 {
     public class Consts
     {
