@@ -5,25 +5,34 @@ The purpose of this repository is to have a working and tested NuGet for LogAnal
 This readme will be updated when these things are in place.
 
 ## Build Status
-![CI](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)
+![publish-nuget](https://github.com/Zimmergren/LogAnalytics.Client/workflows/publish-nuget/badge.svg)
+![code-analysis](https://github.com/Zimmergren/LogAnalytics.Client/workflows/code-analysis/badge.svg)
 
-## GitHub Package
-Currently the package is hosted with GitHub Packages. 
-Get an overview here: https://github.com/Zimmergren/LogAnalytics.Client/packages
-
+## NuGet
+The ![LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
 
 ## How to use the LogAnalytics Client
 
 ### Installing the package
 
-Install the latest version:
+#### Install with the dotnet CLI
 ```
-dotnet add PROJECT package LogAnalytics.Client
+dotnet add package LogAnalytics.Client
 ```
 
-Install a specific version:
+#### Install with NuGet Package Manager
 ```
-dotnet add PROJECT package LogAnalytics.Client --version 1.0.0
+Install-Package LogAnalytics.Client
+```
+
+#### Install by adding a PackageReference to csproj
+```xml
+<PackageReference Include="LogAnalytics.Client" Version="1.0.0" />
+```
+
+#### Install using Paket CLI
+```
+paket add LogAnalytics.Client
 ```
 
 ### Initialize the LogAnalyticsClient
@@ -109,15 +118,9 @@ You should now have a `secrets.json` file in your local project, with contents s
 
 Read more about configuring user secrets in .NET Core projects: https://docs.microsoft.com/aspnet/core/security/app-secrets
 
+## Additional notes
 
---- 
-
-Contents moved here from the initial repository. This will be replaced soon:
-
-=======
---- 
-
-This repository contains a working demo of how to send requests to Azure Log Analytics uwing the Microsoft Log Analytics Data Collector API.
+This project is a spin-off from code samples. The examples and usage grew over time, and an interest was shown of a wrapper or client for Log Analytics.
 
 Related blog posts:
 - https://zimmergren.net/building-custom-data-collectors-for-azure-log-analytics/

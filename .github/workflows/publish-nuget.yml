@@ -1,0 +1,27 @@
+name: publish-nuget
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Wire up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+      working-directory: LogAnalytics.Client/LogAnalytics.Client
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: LogAnalytics.Client/LogAnalytics.Client
+    - name: Publish LogAnalytics.Client
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+          PROJECT_FILE_PATH: LogAnalytics.Client/LogAnalytics.Client/LogAnalytics.Client.csproj
+          NUGET_KEY: ${{secrets.NUGET_LOGANALYTICS_APIKEY}}
