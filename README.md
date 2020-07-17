@@ -104,6 +104,9 @@ Read more about configuring user secrets in .NET Core projects: https://docs.mic
 
 Contents moved here from the initial repository. This will be replaced soon:
 
+=======
+--- 
+
 This repository contains a working demo of how to send requests to Azure Log Analytics uwing the Microsoft Log Analytics Data Collector API.
 
 Related blog posts:
