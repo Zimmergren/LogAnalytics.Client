@@ -7,14 +7,24 @@ This readme will be updated when these things are in place.
 ## Build Status
 Coming soon...
 
-## NuGet Packages
-Coming soon...
+## GitHub Package
+Currently the package is hosted with GitHub Packages. 
+Get an overview here: https://github.com/Zimmergren/LogAnalytics.Client/packages
+
 
 ## How to use the LogAnalytics Client
-To use the `LogAnaltyics.Client`, follow these simple steps. 
 
-### Install the NuGet package
-Coming soon...
+### Installing the package
+
+Install the latest version:
+```
+dotnet add PROJECT package LogAnalytics.Client
+```
+
+Install a specific version:
+```
+dotnet add PROJECT package LogAnalytics.Client --version 1.0.0
+```
 
 ### Initialize the LogAnalyticsClient
 
