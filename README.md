@@ -5,7 +5,8 @@ The purpose of this repository is to have a working and tested NuGet for LogAnal
 This readme will be updated when these things are in place.
 
 ## Build Status
-![CI](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)
+![publish-nuget](https://github.com/Zimmergren/LogAnalytics.Client/workflows/publish-nuget/badge.svg)
+![code-analysis](https://github.com/Zimmergren/LogAnalytics.Client/workflows/code-analysis/badge.svg)
 
 ## GitHub Package
 Currently the package is hosted with GitHub Packages. 
