@@ -9,17 +9,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # SET UP
     - uses: actions/checkout@v2
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    ##- name: Install dependencies
-      ##run: dotnet restore
-      ##working-directory: LogAnalytics.Client/LogAnalytics.Client
+    
+    # NUGET RESTORE
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: Nuget Restore 
+      run: nuget restore .\LogAnalytics.Client\LogAnalytics.Client.sln
+
+    # BUILD
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
+      
+    # PUBLISH NUGET
     - name: Publish LogAnalytics.Client
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
