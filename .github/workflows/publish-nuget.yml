@@ -1,4 +1,4 @@
-name: publish-nuget
+name: CI
 
 on:
   push:
@@ -10,6 +10,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: DevSkim
+      uses: microsoft/DevSkim-Action@v1
+    #- uses: github/codeql-action/upload-sarif@v1
+    #  with:
+    #    sarif_file: devskim-results.sarif
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
