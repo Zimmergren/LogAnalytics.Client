@@ -26,7 +26,7 @@ jobs:
       uses: actions/delete-package-versions@v1.0.2
       with:
         # Comma separated string of package version ids to delete.
-        package-version-ids: "LogAnalytics.Client"
+        package-version-ids: ""
         # Owner of the repo containing the package version to delete. Defaults to the owner of the repo running the action.
 
         owner: "Zimmergren"
