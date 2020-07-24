@@ -32,7 +32,7 @@ jobs:
         owner: "Zimmergren"
         # Repo containing the package version to delete. Defaults to the repo running the action.
 
-        repo: "https://github.com/Zimmergren/LogAnalytics.Client"
+        repo: ""
         # Name of the package containing the version to delete. Required if dynamically deleting oldest versions.
 
         package-name: "LogAnalytics.Client"
