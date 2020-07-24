@@ -6,7 +6,6 @@ This readme will be updated when these things are in place.
 
 ## Build Status
 ![publish-nuget](https://github.com/Zimmergren/LogAnalytics.Client/workflows/publish-nuget/badge.svg)
-![code-analysis](https://github.com/Zimmergren/LogAnalytics.Client/workflows/code-analysis/badge.svg)
 
 ## NuGet
 The ![LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
