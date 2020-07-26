@@ -1,9 +1,9 @@
-﻿using LogAnalyticsClient.Tests.Helpers;
+﻿using LogAnalytics.Client.Tests.Helpers;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
-namespace LogAnalyticsClient.Tests.Tests
+namespace LogAnalytics.Client.Tests.Tests
 {
     /// <summary>
     /// Helper class to wire up local configuration and secrets. 
@@ -11,7 +11,20 @@ namespace LogAnalyticsClient.Tests.Tests
     /// </summary>
     public class TestsBase
     {
-        public static LawSecrets InitSecrets()
+        /* For reference, this is the secrets.json file structure: 
+            {
+              "LawConfiguration": {
+                "LawId": "",
+                "LawKey": ""
+              },
+              "LawServicePrincipalCredentials": {
+                "ClientId": "",
+                "ClientSecret": "",
+                "Domain": ""
+              }
+            }
+         */
+        public static TestSecrets InitSecrets()
         {
             var devEnvironmentVariable = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
             var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) || devEnvironmentVariable.ToLower() == "development";
@@ -25,14 +38,28 @@ namespace LogAnalyticsClient.Tests.Tests
 
             var configuration = configBuilder.Build();
 
-            var lawSection = configuration.GetSection("LawConfiguration");
-            LawSecrets secrets = new LawSecrets
+            var lawConfigurationSection = configuration.GetSection("LawConfiguration");
+            LawSecrets lawSecrets = new LawSecrets
             {
-                LawId = lawSection["LawId"],
-                LawKey = lawSection["LawKey"]
+                LawId = lawConfigurationSection["LawId"],
+                LawKey = lawConfigurationSection["LawKey"]
             };
 
-            return secrets;
+            var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
+            LawPrincipalCredentials lawPrincipalCredentials = new LawPrincipalCredentials
+            {
+                ClientId = lawPrincipalSection["ClientId"],
+                ClientSecret = lawPrincipalSection["ClientSecret"],
+                Domain = lawPrincipalSection["Domain"]
+            };
+
+            TestSecrets testSecrets = new TestSecrets
+            {
+                LawSecrets = lawSecrets,
+                LawPrincipalCredentials = lawPrincipalCredentials,
+            };
+
+            return testSecrets;
         }
     }
 }

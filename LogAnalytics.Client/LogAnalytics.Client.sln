@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30128.36
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalytics.Client", "LogAnalytics.Client\LogAnalytics.Client.csproj", "{40A6CA2A-6A59-4A45-8A58-155080BCCC0A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalyticsClient.Tests", "LogAnalytics.Client.Tests\LogAnalyticsClient.Tests.csproj", "{CF2ED0C5-080B-460C-A578-BAADE19B22E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalytics.Client.Tests", "LogAnalytics.Client.Tests\LogAnalytics.Client.Tests.csproj", "{CF2ED0C5-080B-460C-A578-BAADE19B22E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

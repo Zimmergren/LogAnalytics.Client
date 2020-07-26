@@ -1,4 +1,4 @@
-﻿namespace LogAnalyticsClient.Tests.Helpers
+﻿namespace LogAnalytics.Client.Tests.Helpers
 {
     public class LawSecrets
     {

@@ -1,6 +1,6 @@
+using LogAnalytics.Client.Tests.Helpers;
 using LogAnalytics.Client.Tests.SentinelDemoEntities;
-using LogAnalyticsClient.Tests.Helpers;
-using LogAnalyticsClient.Tests.Tests;
+using LogAnalytics.Client.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace LogAnalytics.Client.Tests
     [TestClass]
     public class SentinelLawDemoTests : TestsBase
     {
-        private static LawSecrets _secrets;
+        private static TestSecrets _secrets;
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
@@ -22,8 +22,8 @@ namespace LogAnalytics.Client.Tests
         public void SendDemoEvents_Test()
         {
             LogAnalyticsClient logger = new LogAnalyticsClient(
-                workspaceId: _secrets.LawId,
-                sharedKey: _secrets.LawKey);
+                workspaceId: _secrets.LawSecrets.LawId,
+                sharedKey: _secrets.LawSecrets.LawKey);
 
             // SECURITY EVENTS (Sample/Demo code only)
             List<CustomSecurityEvent> securityEntities = new List<CustomSecurityEvent>();
