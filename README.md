@@ -103,6 +103,9 @@ Using the `dotnet` CLI from the `LogAnalyticsClient.Tests` project directory:
 ```
 dotnet user-secrets set "LawConfiguration:LawId" "YOUR LOG ANALYTICS INSTANCE ID"
 dotnet user-secrets set "LawConfiguration:LawKey" "YOUR LOG ANALYTICS WORKSPACE KEY"
+dotnet user-secrets set "LawServicePrincipalCredentials:ClientId" "CLIENT ID HERE"
+dotnet user-secrets set "LawServicePrincipalCredentials:ClientSecret" "CLIENT SECRET HERE"
+dotnet user-secrets set "LawServicePrincipalCredentials:Domain" "TENANT NAME OR DOMAIN ID HERE"
 ``` 
 
 You should now have a `secrets.json` file in your local project, with contents similar to this: 
@@ -111,9 +114,22 @@ You should now have a `secrets.json` file in your local project, with contents s
   "LawConfiguration": {
     "LawId": "YOUR LOG ANALYTICS INSTANCE ID",
     "LawKey": "YOUR LOG ANALYTICS WORKSPACE KEY"
+  },
+  "LawServicePrincipalCredentials": {
+    "ClientId": "Principal Client ID Here",
+    "ClientSecret": "Principal Client Secret Here",
+    "Domain": "Your tenant guid here, or tenant name"
   }
 }
 ```
+
+#### Where can I get the credentials?
+To add the secrets with the correct values, you need to add the Workspace Id (LawId), and the Key. 
+You can find these from the Log Analytics Workspace in the Azure Portal, for example.
+
+To add the Service Principal secrets, you should create a new service principal and add a secret, then grant it reader access on the Log Analytics resource. 
+There are steps outlines for that part here: https://zimmergren.net/retrieve-logs-from-application-insights-programmatically-with-net-core-c/ - refer to "Step 1".
+
 
 Read more about configuring user secrets in .NET Core projects: https://docs.microsoft.com/aspnet/core/security/app-secrets
 
