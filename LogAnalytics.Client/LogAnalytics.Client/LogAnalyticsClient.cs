@@ -11,15 +11,22 @@ using System.Threading.Tasks;
 
 namespace LogAnalytics.Client
 {
+    /// <summary>
+    /// Client to send logs to Azure Log Analytics.
+    /// </summary>
     public class LogAnalyticsClient : ILogAnalyticsClient
     {
         private string WorkspaceId { get; }
         private string SharedKey { get; }
         private string RequestBaseUrl { get; }
 
-        // You might want to implement your own disposing patterns, or use a static httpClient instead. Use cases vary depending on how you'd be using the code.
         private readonly HttpClient httpClient;
 
+        /// <summary>
+        /// Instantiate the LogAnalyticsClient object by specifying your Workspace Id and the Key.
+        /// </summary>
+        /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
+        /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
         public LogAnalyticsClient(string workspaceId, string sharedKey)
         {
             if (string.IsNullOrEmpty(workspaceId))
@@ -35,6 +42,13 @@ namespace LogAnalytics.Client
             httpClient = new HttpClient();
         }
 
+        /// <summary>
+        /// Send an entity as a single log entry to Azure Log Analytics.
+        /// </summary>
+        /// <typeparam name="T">Entity Type</typeparam>
+        /// <param name="entity">The object</param>
+        /// <param name="logType">The log type</param>
+        /// <returns>Does not return anything.</returns>
         public async Task SendLogEntry<T>(T entity, string logType)
         {
             #region Argument validation
@@ -54,8 +68,17 @@ namespace LogAnalytics.Client
 
             List<T> list = new List<T> { entity };
             await SendLogEntries(list, logType).ConfigureAwait(false);
+
+            // TODO: add a return status code, or boolean, indicating success or failure.
         }
 
+        /// <summary>
+        /// Send a collection of entities in a batch to Azure Log Analytics.
+        /// </summary>
+        /// <typeparam name="T">The entity type</typeparam>
+        /// <param name="entities">The collection of objects</param>
+        /// <param name="logType">The log type</param>
+        /// <returns>Does not return anything.</returns>
         public async Task SendLogEntries<T>(List<T> entities, string logType)
         {
             #region Argument validation
@@ -90,9 +113,10 @@ namespace LogAnalytics.Client
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = await httpClient.PostAsync(new Uri(RequestBaseUrl), httpContent).ConfigureAwait(false);
 
-            HttpContent responseContent = response.Content;
-            string result = await responseContent.ReadAsStringAsync().ConfigureAwait(false);
             // helpful todo: if you want to return the data, this might be a good place to start working with it...
+            //HttpContent responseContent = response.Content;
+            //string result = await responseContent.ReadAsStringAsync().ConfigureAwait(false);
+            
         }
 
         #region Helpers
