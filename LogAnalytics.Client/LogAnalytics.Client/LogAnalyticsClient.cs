@@ -68,9 +68,8 @@ namespace LogAnalytics.Client
 
             List<T> list = new List<T> { entity };
             await SendLogEntries(list, logType).ConfigureAwait(false);
-
-            // TODO: add a return status code, or boolean, indicating success or failure.
         }
+
 
         /// <summary>
         /// Send a collection of entities in a batch to Azure Log Analytics.
@@ -111,12 +110,13 @@ namespace LogAnalytics.Client
 
             HttpContent httpContent = new StringContent(entityAsJson, Encoding.UTF8);
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            HttpResponseMessage response = await httpClient.PostAsync(new Uri(RequestBaseUrl), httpContent).ConfigureAwait(false);
 
-            // helpful todo: if you want to return the data, this might be a good place to start working with it...
-            //HttpContent responseContent = response.Content;
-            //string result = await responseContent.ReadAsStringAsync().ConfigureAwait(false);
-            
+#pragma warning disable SecurityIntelliSenseCS // MS Security rules violation: false positive, we already operate over HTTPS (SSL) here.
+            var response = await httpClient.PostAsync(new Uri(RequestBaseUrl), httpContent).ConfigureAwait(false);
+#pragma warning restore SecurityIntelliSenseCS // MS Security rules violation
+
+            // Bubble up exceptions if there are any, don't swallow them here. This lets consumers handle it better.
+            response.EnsureSuccessStatusCode();
         }
 
         #region Helpers

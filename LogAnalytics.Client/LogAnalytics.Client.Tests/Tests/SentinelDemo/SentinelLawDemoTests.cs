@@ -4,6 +4,7 @@ using LogAnalytics.Client.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace LogAnalytics.Client.Tests
 {
@@ -27,14 +28,14 @@ namespace LogAnalytics.Client.Tests
 
             // SECURITY EVENTS (Sample/Demo code only)
             List<CustomSecurityEvent> securityEntities = new List<CustomSecurityEvent>();
-            int securityRandom = new Random().Next(100, 12000); // amount of randomized log events to ship.
+            int securityRandom = RandomNumberGenerator.GetInt32(100, 12000); // amount of randomized log events to ship.
             for (int ii = 0; ii < securityRandom; ii++)
             {
                 securityEntities.Add(new CustomSecurityEvent
                 {
-                    Severity = GetSeverity(DateTime.UtcNow.Millisecond),
+                    Severity = GetSeverity(),
                     Source = Environment.MachineName,
-                    Message = GetRandomMessageForTest(DateTime.UtcNow.Millisecond)
+                    Message = GetRandomMessageForTest()
                 });
             }
 
@@ -42,28 +43,29 @@ namespace LogAnalytics.Client.Tests
 
             // AUDIT EVENTS (Sample/Demo code only)
             List<CustomAuditEvent> auditEntities = new List<CustomAuditEvent>();
-            int auditRandom = new Random().Next(250, 5000); // amount of randomized log events to ship.
+            int auditRandom = RandomNumberGenerator.GetInt32(250, 5000); ; // amount of randomized log events to ship.
             for (int ii = 0; ii < auditRandom; ii++)
             {
                 auditEntities.Add(new CustomAuditEvent
                 {
-                    Severity = GetSeverity(DateTime.UtcNow.Millisecond),
+                    Severity = GetSeverity(),
                     Source = Environment.MachineName,
-                    Message = GetRandomMessageForTest(DateTime.UtcNow.Millisecond)
+                    Message = GetRandomMessageForTest()
                 });
             }
 
             logger.SendLogEntries(auditEntities, "customaudit").Wait();
         }
 
-        private string GetSeverity(int seed)
+        private string GetSeverity()
         {
             var severities = new[] { "Critical", "Error", "Warning", "Informational", "Verbose" };
-            int rnd = new Random(DateTime.UtcNow.Millisecond + seed).Next(0, severities.Length);
+
+            int rnd = RandomNumberGenerator.GetInt32(0, severities.Length);
 
             return severities[rnd];
         }
-        private string GetRandomMessageForTest(int seed)
+        private string GetRandomMessageForTest()
         {
             var messages = new[]
             {
@@ -72,7 +74,7 @@ namespace LogAnalytics.Client.Tests
                 "System has detected an anomaly in the magical unicorn gardens",
                 "Apples are healthier than potato chips.",
             };
-            int rnd = new Random(DateTime.UtcNow.Millisecond + seed).Next(0, messages.Length);
+            int rnd = RandomNumberGenerator.GetInt32(0, messages.Length);
 
             return messages[rnd];
         }

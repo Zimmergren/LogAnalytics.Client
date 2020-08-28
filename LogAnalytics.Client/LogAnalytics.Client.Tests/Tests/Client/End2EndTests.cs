@@ -112,8 +112,10 @@ namespace LogAnalytics.Client.Tests.Tests
 
             var credentials = await ApplicationTokenProvider.LoginSilentAsync(domain, lawPrincipalClientId, lawPrincipalClientSecret, adSettings);
 
-            var client = new OperationalInsightsDataClient(credentials);
-            client.WorkspaceId = workspaceId;
+            var client = new OperationalInsightsDataClient(credentials)
+            {
+                WorkspaceId = workspaceId
+            };
 
             return client;
         }

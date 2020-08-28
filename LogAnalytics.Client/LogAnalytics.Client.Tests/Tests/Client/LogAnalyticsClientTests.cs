@@ -4,6 +4,7 @@ using LogAnalytics.Client.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace LogAnalytics.Client.Tests
 {
@@ -96,21 +97,21 @@ namespace LogAnalytics.Client.Tests
         private string GetCategory()
         {
             var categories = new[] { "DevOps", "Development", "Management", "Administration", "IR", "HR" };
-            int rnd = new Random().Next(0, categories.Length);
+            int rnd = RandomNumberGenerator.GetInt32(0, categories.Length);
 
             return categories[rnd];
         }
         private string GetCriticality()
         {
             var categories = new[] { "Exception", "Warning", "Informational" };
-            int rnd = new Random().Next(0, categories.Length);
+            int rnd = RandomNumberGenerator.GetInt32(0, categories.Length);
 
             return categories[rnd];
         }
         private string GetSystemSource()
         {
             var categories = new[] { "Search Index Runner", "Analysis Runner", "Discovery Engine", "Magical Unicorn Code Box", "Amazing Apples" };
-            int rnd = new Random().Next(0, categories.Length);
+            int rnd = RandomNumberGenerator.GetInt32(0, categories.Length);
 
             return categories[rnd];
         }

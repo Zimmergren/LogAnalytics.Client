@@ -9,7 +9,7 @@
 Easily send C# entities as log entries to the Log Analytics Workspace.</Description>
     <PackageProjectUrl>https://github.com/Zimmergren/LogAnalytics.Client</PackageProjectUrl>
     <PackageId>LogAnalytics.Client</PackageId>
-    <Version>1.0.1</Version>    
+    <Version>1.0.2</Version>    
     <PackageDescription>A .NET Core client for Azure Log Analytics</PackageDescription>
     <RepositoryUrl>https://github.com/Zimmergren/LogAnalytics.Client</RepositoryUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
