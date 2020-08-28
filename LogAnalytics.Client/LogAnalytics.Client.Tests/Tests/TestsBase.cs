@@ -42,8 +42,12 @@ namespace LogAnalytics.Client.Tests.Tests
                 string secretsLocation = Environment.GetEnvironmentVariable("SECRETS_LOCATION").ToLower();
                 if (secretsLocation == "githubactions")
                 {
+                    Console.WriteLine("Running GitHub Actions - Setting the variables now");
+
                     // If these tests are run as part of a GitHub Action, we'll pick the secrets directly from the environment variables during the pipeline execution.
                     lawId = Environment.GetEnvironmentVariable("GHA_LAW_ID");
+                    if (!string.IsNullOrEmpty(lawId))
+                        Console.WriteLine($"Law ID variable is wired up: {lawId.Substring(0,5)}"); // produce something for the GitHub Actions log to verify if variables are wired up.
                     lawKey = Environment.GetEnvironmentVariable("GHA_LAW_KEY");
                     lawPrincipalClientId = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTID");
                     lawPrincipalClientSecret = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTSECRET");
