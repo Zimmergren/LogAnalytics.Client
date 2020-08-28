@@ -15,11 +15,11 @@ jobs:
         working-directory: LogAnalytics.Client/LogAnalytics.Client.Tests
         env: 
           SECRETS_LOCATION: "GitHubActions"
-          GHA_LAW_ID: ${{secrets.GHA_LAW_ID}}
-          GHA_LAW_KEY: ${{secrets.GHA_LAW_KEY}}
-          GHA_LAW_PRINCIPAL_CLIENTID: ${{secrets.GHA_LAW_PRINCIPAL_CLIENTID}}
-          GHA_LAW_PRINCIPAL_CLIENTSECRET: ${{secrets.GHA_LAW_PRINCIPAL_CLIENTSECRET}}
-          GHA_LAW_PRINCIPAL_DOMAIN: ${{secrets.GHA_LAW_PRINCIPAL_DOMAIN}}
+          GHA_LAW_ID: "${{secrets.GHA_LAW_ID}}"
+          GHA_LAW_KEY: "${{secrets.GHA_LAW_KEY}}"
+          GHA_LAW_PRINCIPAL_CLIENTID: "${{secrets.GHA_LAW_PRINCIPAL_CLIENTID}}"
+          GHA_LAW_PRINCIPAL_CLIENTSECRET: "${{secrets.GHA_LAW_PRINCIPAL_CLIENTSECRET}}"
+          GHA_LAW_PRINCIPAL_DOMAIN: "${{secrets.GHA_LAW_PRINCIPAL_DOMAIN}}"
   build:
     needs: tests # ensure we run the integration tests before we start building and packaging.
     runs-on: ubuntu-latest
