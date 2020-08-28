@@ -26,31 +26,61 @@ namespace LogAnalytics.Client.Tests.Tests
          */
         public static TestSecrets InitSecrets()
         {
-            var devEnvironmentVariable = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-            var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) || devEnvironmentVariable.ToLower() == "development";
-
             var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables();
-
-            if (isDevelopment)
+            
+            // Variables to hold the secrets.
+            string lawId;
+            string lawKey;
+            string lawPrincipalClientId;
+            string lawPrincipalClientSecret;
+            string lawPrincipalDomain;
+            
+            try
+            {
+                string secretsLocation = Environment.GetEnvironmentVariable("SECRETS_LOCATION").ToLower();
+                if (secretsLocation == "githubactions")
+                {
+                    // If these tests are run as part of a GitHub Action, we'll pick the secrets directly from the environment variables during the pipeline execution.
+                    lawId = Environment.GetEnvironmentVariable("GHA_LAW_ID");
+                    lawKey = Environment.GetEnvironmentVariable("GHA_LAW_KEY");
+                    lawPrincipalClientId = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTID");
+                    lawPrincipalClientSecret = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTSECRET");
+                    lawPrincipalDomain = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_DOMAIN");
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("The environment variable 'SECRETS_LOCATION' needs to have a value of GitHubActions, or not exist");
+                }
+            }
+            catch
+            {
+                // No variable is loaded. Assume user secrets. 
                 configBuilder.AddUserSecrets<LawSecrets>();
+                var configuration = configBuilder.Build();
 
-            var configuration = configBuilder.Build();
+                var lawConfigurationSection = configuration.GetSection("LawConfiguration");
+                lawId = lawConfigurationSection["LawId"];
+                lawKey = lawConfigurationSection["LawKey"];
 
-            var lawConfigurationSection = configuration.GetSection("LawConfiguration");
+                var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
+                lawPrincipalClientId = lawPrincipalSection["ClientId"];
+                lawPrincipalClientSecret = lawPrincipalSection["ClientSecret"];
+                lawPrincipalDomain = lawPrincipalSection["Domain"];
+            }
+
             LawSecrets lawSecrets = new LawSecrets
             {
-                LawId = lawConfigurationSection["LawId"],
-                LawKey = lawConfigurationSection["LawKey"]
+                LawId = lawId,
+                LawKey = lawKey
             };
 
-            var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
             LawPrincipalCredentials lawPrincipalCredentials = new LawPrincipalCredentials
             {
-                ClientId = lawPrincipalSection["ClientId"],
-                ClientSecret = lawPrincipalSection["ClientSecret"],
-                Domain = lawPrincipalSection["Domain"]
+                ClientId = lawPrincipalClientId,
+                ClientSecret = lawPrincipalClientSecret,
+                Domain = lawPrincipalDomain
             };
 
             TestSecrets testSecrets = new TestSecrets
