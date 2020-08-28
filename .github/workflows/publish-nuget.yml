@@ -4,17 +4,22 @@ on:
   push:
     branches: [ main ]
 
+
 jobs:
-  build:
+  tests:
+    name: Integration Tests
     runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - run: dotnet test
+        working-directory: LogAnalytics.Client/LogAnalytics.Client.Tests
+  build:
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: DevSkim
       uses: microsoft/DevSkim-Action@v1
-    #- uses: github/codeql-action/upload-sarif@v1
-    #  with:
-    #    sarif_file: devskim-results.sarif
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -25,9 +30,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
-    - name: Test
-      run: dotnet test
-      working-directory: LogAnalytics.Client/LogAnalytics.Client.Tests
     - name: Publish LogAnalytics.Client
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
