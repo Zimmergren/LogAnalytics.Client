@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -18,24 +18,16 @@ jobs:
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-    #- name: Generate build number
-    #  id: buildnumber
-    #  uses: einaregilsson/build-number@v2
-    #  with:
-    #    token: ${{secrets.github_token}}
-    #- name: SemVerTag
-    #  uses: K-Phoen/semver-release-action@master
-    #  with:
-    #    release_branch: main
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        dotnet-version: 3.1.401
     - name: Install dependencies
       run: dotnet restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
+    - name: Test
+      run: dotnet test
+      working-directory: LogAnalytics.Client/LogAnalytics.Client.Tests
     - name: Publish LogAnalytics.Client
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
