@@ -9,7 +9,7 @@ This readme will be updated when these things are in place.
 ![CodeQL - Code Security](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CodeQL/badge.svg)
 
 ## NuGet
-The ![LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
+The [LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
 
 ## How to use the LogAnalytics Client
 
