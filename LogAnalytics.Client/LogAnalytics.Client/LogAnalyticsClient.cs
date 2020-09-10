@@ -150,6 +150,8 @@ namespace LogAnalytics.Client
                 if (propertyInfo.PropertyType != typeof(string) &&
                     propertyInfo.PropertyType != typeof(bool) &&
                     propertyInfo.PropertyType != typeof(double) &&
+                    propertyInfo.PropertyType != typeof(int) &&
+                    propertyInfo.PropertyType != typeof(long) &&
                     propertyInfo.PropertyType != typeof(DateTime) &&
                     propertyInfo.PropertyType != typeof(Guid))
                 {
