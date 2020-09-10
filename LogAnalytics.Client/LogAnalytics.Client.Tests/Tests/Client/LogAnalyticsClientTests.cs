@@ -43,7 +43,8 @@ namespace LogAnalytics.Client.Tests
                 TestBoolean = true,
                 TestDateTime = DateTime.UtcNow,
                 TestDouble = 2.1,
-                TestGuid = Guid.NewGuid()
+                TestGuid = Guid.NewGuid(),
+                TestInteger = 1234
             }, "demolog").Wait();
         }
 
@@ -61,7 +62,8 @@ namespace LogAnalytics.Client.Tests
                 {
                     Criticality = GetCriticality(),
                     Message = "lorem ipsum dolor sit amet",
-                    SystemSource = GetSystemSource()
+                    SystemSource = GetSystemSource(),
+                    Priority = 2
                 });
             }
 
@@ -86,8 +88,7 @@ namespace LogAnalytics.Client.Tests
                     MyCustomProperty = new MyCustomClass
                     {
                         MyString = "hello world",
-                    },
-                    TestInt = 123
+                    }
                 });
             }
 

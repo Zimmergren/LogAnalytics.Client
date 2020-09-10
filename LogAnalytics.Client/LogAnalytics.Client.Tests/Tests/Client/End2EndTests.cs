@@ -46,7 +46,8 @@ namespace LogAnalytics.Client.Tests.Tests
                 {
                     Criticality = "e2ecriticality",
                     Message = testIdentifierEntries,
-                    SystemSource = "e2etest"
+                    SystemSource = "e2etest",
+                    Priority = int.MaxValue-1
                 });
             }
 
@@ -58,7 +59,8 @@ namespace LogAnalytics.Client.Tests.Tests
             {
                 Criticality = "e2ecriticalitysingleentry",
                 Message = testIdentifierEntry,
-                SystemSource = "e2etestsingleentry"
+                SystemSource = "e2etestsingleentry",
+                Priority = int.MinValue+1
             }, "endtoendlogs").Wait();
 
             // Since it takes a while before the logs are queryable, we'll sit tight and wait for a few minutes before we launch the retrieval-tests.
@@ -76,6 +78,7 @@ namespace LogAnalytics.Client.Tests.Tests
             Assert.AreEqual(testIdentifierEntries, entry["Message"]);
             Assert.AreEqual("e2etest", entry["SystemSource_s"]);
             Assert.AreEqual("e2ecriticality", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MaxValue-1}", entry["Priority_d"]);
         }
 
         [TestMethod]
@@ -88,6 +91,7 @@ namespace LogAnalytics.Client.Tests.Tests
             Assert.AreEqual(testIdentifierEntry, entry["Message"]);
             Assert.AreEqual("e2etestsingleentry", entry["SystemSource_s"]);
             Assert.AreEqual("e2ecriticalitysingleentry", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MinValue + 1}", entry["Priority_d"]);
         }
 
         // TODO: Enhance test coverage in the E2E tests

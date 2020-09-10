@@ -2,7 +2,7 @@
 {
     public class TestEntityBadProperties
     {
-        public int TestInt { get; set; }
+        public long LongIsNotWorking { get;set;}
         public MyCustomClass MyCustomProperty { get; set; }
     }
 
