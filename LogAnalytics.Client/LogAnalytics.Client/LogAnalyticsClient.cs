@@ -147,15 +147,14 @@ namespace LogAnalytics.Client
             // anything else will be throwing an exception here.
             foreach (PropertyInfo propertyInfo in entity.GetType().GetProperties())
             {
-                if (propertyInfo.PropertyType != typeof(string) &&
-                    propertyInfo.PropertyType != typeof(bool) &&
-                    propertyInfo.PropertyType != typeof(double) &&
-                    propertyInfo.PropertyType != typeof(int) &&
-                    propertyInfo.PropertyType != typeof(long) &&
-                    propertyInfo.PropertyType != typeof(DateTime) &&
-                    propertyInfo.PropertyType != typeof(Guid))
+                if (propertyInfo.PropertyType != typeof(string) &&      // represented as columnName_s
+                    propertyInfo.PropertyType != typeof(bool) &&        // represented as columnName_b
+                    propertyInfo.PropertyType != typeof(double) &&      // represented as columnName_d
+                    propertyInfo.PropertyType != typeof(int) &&         // represented as columnName_d
+                    propertyInfo.PropertyType != typeof(DateTime) &&    // represented as columnName_t
+                    propertyInfo.PropertyType != typeof(Guid))          // represented as columnName_g
                 {
-                    throw new ArgumentOutOfRangeException($"Property '{propertyInfo.Name}' of entity with type '{entity.GetType()}' is not one of the valid properties. Valid properties are String, Boolean, Double, DateTime, Guid.");
+                    throw new ArgumentOutOfRangeException($"Property '{propertyInfo.Name}' of entity with type '{entity.GetType()}' is not one of the valid properties. Valid properties are String, Boolean, Double, Integer, DateTime, Guid.");
                 }
             }
         }

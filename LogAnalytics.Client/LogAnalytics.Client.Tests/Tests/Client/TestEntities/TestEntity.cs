@@ -8,6 +8,7 @@ namespace LogAnalytics.Client.Tests.TestEntities
         public string TestString { get; set; }
         public bool TestBoolean { get; set; }
         public Double TestDouble { get; set; }
+        public int TestInteger { get;set;}
         public DateTime TestDateTime { get; set; }
         public Guid TestGuid { get; set; }
     }
