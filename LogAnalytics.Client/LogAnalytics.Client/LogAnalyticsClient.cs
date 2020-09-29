@@ -42,6 +42,7 @@ namespace LogAnalytics.Client
             httpClient = new HttpClient();
         }
 
+
         /// <summary>
         /// Send an entity as a single log entry to Azure Log Analytics.
         /// </summary>
@@ -49,12 +50,12 @@ namespace LogAnalytics.Client
         /// <param name="entity">The object</param>
         /// <param name="logType">The log type</param>
         /// <returns>Does not return anything.</returns>
-        public async Task SendLogEntry<T>(T entity, string logType)
+        public Task SendLogEntry<T>(T entity, string logType)
         {
             #region Argument validation
 
             if (entity == null)
-                throw new NullReferenceException("parameter 'entity' cannot be null");
+                throw new ArgumentNullException(nameof(entity), $"parameter '{nameof(entity)}' cannot be null");
 
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
@@ -67,7 +68,7 @@ namespace LogAnalytics.Client
             #endregion
 
             List<T> list = new List<T> { entity };
-            await SendLogEntries(list, logType).ConfigureAwait(false);
+            return SendLogEntries(list, logType);
         }
 
 
@@ -83,7 +84,7 @@ namespace LogAnalytics.Client
             #region Argument validation
 
             if (entities == null)
-                throw new NullReferenceException("parameter 'entities' cannot be null");
+                throw new ArgumentNullException(nameof(entities), $"parameter '{nameof(entities)}' cannot be null");
 
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
@@ -147,12 +148,13 @@ namespace LogAnalytics.Client
             // anything else will be throwing an exception here.
             foreach (PropertyInfo propertyInfo in entity.GetType().GetProperties())
             {
-                if (propertyInfo.PropertyType != typeof(string) &&      // represented as columnName_s
-                    propertyInfo.PropertyType != typeof(bool) &&        // represented as columnName_b
-                    propertyInfo.PropertyType != typeof(double) &&      // represented as columnName_d
-                    propertyInfo.PropertyType != typeof(int) &&         // represented as columnName_d
-                    propertyInfo.PropertyType != typeof(DateTime) &&    // represented as columnName_t
-                    propertyInfo.PropertyType != typeof(Guid))          // represented as columnName_g
+                if (propertyInfo.PropertyType != typeof(string) &&
+                    propertyInfo.PropertyType != typeof(bool) &&
+                    propertyInfo.PropertyType != typeof(double) &&
+                    propertyInfo.PropertyType != typeof(int) &&     // Represented as a double in the system.
+                    propertyInfo.PropertyType != typeof(long) &&
+                    propertyInfo.PropertyType != typeof(DateTime) &&
+                    propertyInfo.PropertyType != typeof(Guid))
                 {
                     throw new ArgumentOutOfRangeException($"Property '{propertyInfo.Name}' of entity with type '{entity.GetType()}' is not one of the valid properties. Valid properties are String, Boolean, Double, Integer, DateTime, Guid.");
                 }

@@ -43,9 +43,8 @@ namespace LogAnalytics.Client.Tests
                 TestBoolean = true,
                 TestDateTime = DateTime.UtcNow,
                 TestDouble = 2.1,
-                TestGuid = Guid.NewGuid(),
-                TestInteger = 1234
-            }, "demolog").Wait();
+                TestGuid = Guid.NewGuid()
+            }, "demolog");
         }
 
         [TestMethod]

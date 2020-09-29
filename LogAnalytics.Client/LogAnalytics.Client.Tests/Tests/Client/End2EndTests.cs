@@ -59,9 +59,8 @@ namespace LogAnalytics.Client.Tests.Tests
             {
                 Criticality = "e2ecriticalitysingleentry",
                 Message = testIdentifierEntry,
-                SystemSource = "e2etestsingleentry",
-                Priority = int.MinValue+1
-            }, "endtoendlogs").Wait();
+                SystemSource = "e2etestsingleentry"
+            }, "endtoendlogs");
 
             // Since it takes a while before the logs are queryable, we'll sit tight and wait for a few minutes before we launch the retrieval-tests.
             Thread.Sleep(6 * 1000 * 60);
