@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LogAnalytics.Client.Tests.Tests
+namespace LogAnalytics.Client.Tests
 {
     [TestClass]
     public class End2EndTests : TestsBase
@@ -18,6 +18,7 @@ namespace LogAnalytics.Client.Tests.Tests
         private static TestSecrets _secrets;
         private static string testIdentifierEntries;
         private static string testIdentifierEntry;
+        private static string testIdentifierEncodingEntry;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
@@ -27,11 +28,17 @@ namespace LogAnalytics.Client.Tests.Tests
             _secrets = InitSecrets();
 
             // Get a data client, helping us actually Read data, too.
-            _dataClient = GetLawDataClient(_secrets.LawSecrets.LawId, _secrets.LawPrincipalCredentials.ClientId, _secrets.LawPrincipalCredentials.ClientSecret, _secrets.LawPrincipalCredentials.Domain).Result;
+            _dataClient = GetLawDataClient(
+                _secrets.LawSecrets.LawId, 
+                _secrets.LawPrincipalCredentials.ClientId, 
+                _secrets.LawPrincipalCredentials.ClientSecret, 
+                _secrets.LawPrincipalCredentials.Domain)
+                .Result;
 
             // Set up unique identifiers for the tests. This helps us query the Log Analytics Workspace for our specific messages, and ensure the count and properties are correctly shipped to the logs.
             testIdentifierEntries = $"test-id-{Guid.NewGuid()}";
             testIdentifierEntry = $"test-id-{Guid.NewGuid()}";
+            testIdentifierEncodingEntry = $"test-id-{Guid.NewGuid()}-ÅÄÖ@~#$%^&*()123";
 
             // Initialize the LAW Client.
             LogAnalyticsClient logger = new LogAnalyticsClient(
@@ -50,7 +57,6 @@ namespace LogAnalytics.Client.Tests.Tests
                     Priority = int.MaxValue-1
                 });
             }
-
             logger.SendLogEntries(entities, "endtoendlogs").Wait();
 
 
@@ -64,6 +70,17 @@ namespace LogAnalytics.Client.Tests.Tests
             }, "endtoendlogs");
 
             // Since it takes a while before the logs are queryable, we'll sit tight and wait for a few minutes before we launch the retrieval-tests.
+
+            // Test 3 prep: Verify that different encoding types work
+            var encodingTestEntity = new DemoEntity
+            {
+                Criticality = "e2ecriticalityencoding",
+                Message = $"{testIdentifierEncodingEntry}", // Special encoding test.
+                SystemSource = "e2etestencoding",
+                Priority = int.MaxValue - 10000
+            };
+            logger.SendLogEntry(encodingTestEntity, "endtoendlogs");
+
             Thread.Sleep(6 * 1000 * 60);
         }
 
@@ -94,10 +111,22 @@ namespace LogAnalytics.Client.Tests.Tests
             Assert.AreEqual($"{int.MinValue + 1}", entry["Priority_d"]);
         }
 
+        [TestMethod]
+        public void E2E_VerifySendLogEntry_VerifyEncoding_Test()
+        {
+            var query = _dataClient.Query($"endtoendlogs_CL | where Message == '{testIdentifierEncodingEntry}' | order by TimeGenerated desc | limit 10");
+            Assert.AreEqual(1, query.Results.Count());
+
+            var entry = query.Results.First();
+            Assert.AreEqual($"{testIdentifierEncodingEntry}", entry["Message"]);
+            Assert.AreEqual("e2etestencoding", entry["SystemSource_s"]);
+            Assert.AreEqual("e2ecriticalityencoding", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MaxValue - 10000}", entry["Priority_d"]);
+        }
+
         // TODO: Enhance test coverage in the E2E tests
         // - Cover custom types and entities
         // - Cover huge amounts of data
-        // - Cover special charachers
 
         private static async Task<OperationalInsightsDataClient> GetLawDataClient(string workspaceId, string lawPrincipalClientId, string lawPrincipalClientSecret, string domain)
         {

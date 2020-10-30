@@ -1,6 +1,5 @@
 using LogAnalytics.Client.Tests.Helpers;
 using LogAnalytics.Client.Tests.TestEntities;
-using LogAnalytics.Client.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -67,7 +66,6 @@ namespace LogAnalytics.Client.Tests
             }
 
             // after this is sent, wait a couple of minutes and then check your Log Analytics dashboard.
-            // todo: if you want a true integration test, wait for it here, then query the logs from code and verify that the entries are there, then assert the test.
             logger.SendLogEntries(entities, "demolog").Wait();
         }
 

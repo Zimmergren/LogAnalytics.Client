@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
-namespace LogAnalytics.Client.Tests.Tests
+namespace LogAnalytics.Client.Tests
 {
     /// <summary>
     /// Helper class to wire up local configuration and secrets. 
