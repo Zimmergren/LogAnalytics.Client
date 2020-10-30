@@ -1,6 +1,5 @@
 using LogAnalytics.Client.Tests.Helpers;
 using LogAnalytics.Client.Tests.SentinelDemoEntities;
-using LogAnalytics.Client.Tests.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
