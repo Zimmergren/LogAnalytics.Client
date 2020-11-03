@@ -19,6 +19,7 @@ namespace LogAnalytics.Client.Tests
         private static string testIdentifierEntries;
         private static string testIdentifierEntry;
         private static string testIdentifierEncodingEntry;
+        private static string testIdentifierNullableEntry;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
@@ -39,6 +40,7 @@ namespace LogAnalytics.Client.Tests
             testIdentifierEntries = $"test-id-{Guid.NewGuid()}";
             testIdentifierEntry = $"test-id-{Guid.NewGuid()}";
             testIdentifierEncodingEntry = $"test-id-{Guid.NewGuid()}-ÅÄÖ@~#$%^&*()123";
+            testIdentifierNullableEntry = $"test-id-{Guid.NewGuid()}";
 
             // Initialize the LAW Client.
             LogAnalyticsClient logger = new LogAnalyticsClient(
@@ -81,6 +83,17 @@ namespace LogAnalytics.Client.Tests
             };
             logger.SendLogEntry(encodingTestEntity, "endtoendlogs");
 
+            // Test 4 prep: Verify that nullable entries work
+            var nullableTestEntity = new NullableDemoEntity
+            {
+                Message = $"{testIdentifierNullableEntry}",
+                NoValue = null,
+                WithValue = int.MaxValue - 20000
+            };
+
+            logger.SendLogEntry(nullableTestEntity, "endtoendlogs");
+
+
             Thread.Sleep(6 * 1000 * 60);
         }
 
@@ -122,6 +135,19 @@ namespace LogAnalytics.Client.Tests
             Assert.AreEqual("e2etestencoding", entry["SystemSource_s"]);
             Assert.AreEqual("e2ecriticalityencoding", entry["Criticality_s"]);
             Assert.AreEqual($"{int.MaxValue - 10000}", entry["Priority_d"]);
+        }
+
+        [TestMethod]
+        public void E2E_VerifySendLogEntry_Nullable_Test()
+        {
+            var query = _dataClient.Query($"endtoendlogs_CL | where Message == '{testIdentifierNullableEntry}' | order by TimeGenerated desc | limit 10");
+            Assert.AreEqual(1, query.Results.Count());
+
+            var entry = query.Results.First();
+            Assert.AreEqual($"{testIdentifierNullableEntry}", entry["Message"]);
+            Assert.AreEqual(true, entry.ContainsKey("WithValue_d"));
+            Assert.AreEqual($"{int.MaxValue - 20000}", entry["WithValue_d"]);
+            Assert.AreEqual(false, entry.ContainsKey("NoValue_d"));
         }
 
         // TODO: Enhance test coverage in the E2E tests
