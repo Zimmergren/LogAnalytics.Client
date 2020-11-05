@@ -99,7 +99,7 @@ namespace LogAnalytics.Client
 
             var dateTimeNow = DateTime.UtcNow.ToString("r");
 
-            var entityAsJson = JsonConvert.SerializeObject(entities);
+            var entityAsJson = JsonConvert.SerializeObject(entities, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
 
             httpClient.DefaultRequestHeaders.Clear();
@@ -145,16 +145,23 @@ namespace LogAnalytics.Client
         private void ValidatePropertyTypes<T>(T entity)
         {
             // as of 2018-10-30, the allowed property types for log analytics, as defined here (https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api#record-type-and-properties) are: string, bool, double, datetime, guid.
+            // also allow them as nullable
             // anything else will be throwing an exception here.
             foreach (PropertyInfo propertyInfo in entity.GetType().GetProperties())
             {
                 if (propertyInfo.PropertyType != typeof(string) &&
                     propertyInfo.PropertyType != typeof(bool) &&
+                    propertyInfo.PropertyType != typeof(bool?) &&
                     propertyInfo.PropertyType != typeof(double) &&
+                    propertyInfo.PropertyType != typeof(double?) &&
                     propertyInfo.PropertyType != typeof(int) &&     // Represented as a double in the system.
+                    propertyInfo.PropertyType != typeof(int?) && 
                     propertyInfo.PropertyType != typeof(long) &&
+                    propertyInfo.PropertyType != typeof(long?) &&
                     propertyInfo.PropertyType != typeof(DateTime) &&
-                    propertyInfo.PropertyType != typeof(Guid))
+                    propertyInfo.PropertyType != typeof(DateTime?) &&
+                    propertyInfo.PropertyType != typeof(Guid) &&
+                    propertyInfo.PropertyType != typeof(Guid?))
                 {
                     throw new ArgumentOutOfRangeException($"Property '{propertyInfo.Name}' of entity with type '{entity.GetType()}' is not one of the valid properties. Valid properties are String, Boolean, Double, Integer, DateTime, Guid.");
                 }
