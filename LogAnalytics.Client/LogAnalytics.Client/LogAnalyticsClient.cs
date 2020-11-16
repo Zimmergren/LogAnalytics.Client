@@ -102,18 +102,22 @@ namespace LogAnalytics.Client
             var entityAsJson = JsonConvert.SerializeObject(entities, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
 
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Add("Authorization", authSignature);
-            httpClient.DefaultRequestHeaders.Add("Log-Type", logType);
-            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            httpClient.DefaultRequestHeaders.Add("x-ms-date", dateTimeNow);
-            httpClient.DefaultRequestHeaders.Add("time-generated-field", ""); // if we want to extend this in the future to support custom date fields from the entity etc.
+            var request = new HttpRequestMessage(HttpMethod.Post, RequestBaseUrl);
+
+            request.Headers.Clear();
+            request.Headers.Add("Authorization", authSignature);
+            request.Headers.Add("Log-Type", logType);
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("x-ms-date", dateTimeNow);
+            request.Headers.Add("time-generated-field", ""); // if we want to extend this in the future to support custom date fields from the entity etc.
 
             HttpContent httpContent = new StringContent(entityAsJson, Encoding.UTF8);
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
+            request.Content = httpContent;
+
 #pragma warning disable SecurityIntelliSenseCS // MS Security rules violation: false positive, we already operate over HTTPS (SSL) here.
-            var response = await httpClient.PostAsync(new Uri(RequestBaseUrl), httpContent).ConfigureAwait(false);
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
 #pragma warning restore SecurityIntelliSenseCS // MS Security rules violation
 
             // Bubble up exceptions if there are any, don't swallow them here. This lets consumers handle it better.
