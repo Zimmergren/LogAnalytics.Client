@@ -20,7 +20,7 @@ Easily send C# entities as log entries to the Log Analytics Workspace.</Descript
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Azure.OperationalInsights" Version="0.10.0-preview" />
+    <PackageReference Include="Microsoft.Azure.OperationalInsights" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
