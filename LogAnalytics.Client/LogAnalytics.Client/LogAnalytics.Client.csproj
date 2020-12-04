@@ -9,7 +9,7 @@
 Easily send C# entities as log entries to the Log Analytics Workspace.</Description>
     <PackageProjectUrl>https://github.com/Zimmergren/LogAnalytics.Client</PackageProjectUrl>
     <PackageId>LogAnalytics.Client</PackageId>
-    <Version>1.0.7</Version>    
+    <Version>1.1.0</Version>    
     <PackageDescription>A .NET Core client for Azure Log Analytics</PackageDescription>
     <RepositoryUrl>https://github.com/Zimmergren/LogAnalytics.Client</RepositoryUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -20,7 +20,7 @@ Easily send C# entities as log entries to the Log Analytics Workspace.</Descript
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Azure.OperationalInsights" Version="0.10.0-preview" />
+    <PackageReference Include="Microsoft.Azure.OperationalInsights" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
