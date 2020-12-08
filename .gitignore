@@ -5,3 +5,4 @@ packages/
 *.csproj.user
 .vs/
 node_modules
+/LogAnalytics.Client/TestResults

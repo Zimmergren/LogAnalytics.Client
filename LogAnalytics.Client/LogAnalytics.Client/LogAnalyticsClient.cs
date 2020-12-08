@@ -57,6 +57,9 @@ namespace LogAnalytics.Client
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity), $"parameter '{nameof(entity)}' cannot be null");
 
+            if (string.IsNullOrEmpty(logType))
+                throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
+
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
 
@@ -85,6 +88,12 @@ namespace LogAnalytics.Client
 
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities), $"parameter '{nameof(entities)}' cannot be null");
+
+            if (string.IsNullOrEmpty(logType))
+                throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
+
+            //if (string.IsNullOrEmpty(logType))
+            //    throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
 
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");

@@ -11,7 +11,7 @@ namespace LogAnalytics.Client.Tests
     /// Basic tests for the LogAnalyticsClient.
     /// </summary>
     [TestClass]
-    public class LogAnalyticsClientTests : TestsBase
+    public class LogAnalyticsClientIntegrationTests : TestsBase
     {
         private static TestSecrets _secrets;
 
