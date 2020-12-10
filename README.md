@@ -1,8 +1,5 @@
 # LogAnalytics Client for .NET Core
-> Note 2020: This project has been rebranded from Data Collector for Azure Log Analytics to LogAnalytics.Client.
-
 The purpose of this repository is to have a working and tested NuGet for LogAnalytics to use in our projects.
-This readme will be updated when these things are in place.
 
 ## Build Status
 [![CI - Integration Tests - NuGet](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)](https://www.nuget.org/packages/loganalytics.client)
