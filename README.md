@@ -1,5 +1,6 @@
 # LogAnalytics Client for .NET Core
-The purpose of this repository is to have a working and tested NuGet for LogAnalytics to use in our projects.
+The easiest way to send logs to Azure Log Analytics from your apps.
+Construct a custom object and send it to Log Analytics. It will be represented as a log entry in the logs. This helps make logging easy in your applications, and you can focus on more important business logic.
 
 ## Build Status
 [![CI - Integration Tests - NuGet](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)](https://www.nuget.org/packages/loganalytics.client)
