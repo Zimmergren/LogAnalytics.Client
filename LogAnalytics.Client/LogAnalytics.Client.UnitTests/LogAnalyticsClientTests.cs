@@ -1,9 +1,17 @@
-﻿using LogAnalytics.Client.UnitTests.TestEntities;
+﻿using Autofac;
+using Autofac.Extras.Moq;
+using LogAnalytics.Client.UnitTests.TestEntities;
+using Moq;
+using Moq.Protected;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace LogAnalytics.Client.Tests.UnitTests
+namespace LogAnalytics.Client.IntegrationTests.UnitTests
 {
     public class LogAnalyticsClientTests
     {

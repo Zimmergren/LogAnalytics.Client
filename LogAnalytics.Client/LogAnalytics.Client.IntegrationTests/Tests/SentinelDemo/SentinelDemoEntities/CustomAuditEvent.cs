@@ -1,4 +1,4 @@
-﻿namespace LogAnalytics.Client.Tests.SentinelDemoEntities
+﻿namespace LogAnalytics.Client.IntegrationTests.SentinelDemoEntities
 {
     public class CustomAuditEvent : ICustomLawEntity
     {

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "LogAnalytics.Client.Tests": {
+    "LogAnalytics.Client.IntegrationTests": {
       "commandName": "Project"
     }
   }

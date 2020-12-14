@@ -34,12 +34,10 @@ namespace LogAnalytics.Client
 
             if (string.IsNullOrEmpty(sharedKey))
                 throw new ArgumentNullException(nameof(sharedKey), "sharedKey cannot be null or empty");
-
+            
             WorkspaceId = workspaceId;
             SharedKey = sharedKey;
             RequestBaseUrl = $"https://{WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
-
-            httpClient = new HttpClient();
         }
 
 
