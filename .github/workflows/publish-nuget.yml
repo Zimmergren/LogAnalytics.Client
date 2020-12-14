@@ -28,6 +28,7 @@ jobs:
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
   buildandpublish:
+    name: Build and Publish NuGet
     needs: [unittests,integrationtests] # ensure we run the unit tests, and integration tests before we start building and packaging.
     runs-on: ubuntu-latest
     steps:
