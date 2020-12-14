@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30128.36
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalytics.Client", "LogAnalytics.Client\LogAnalytics.Client.csproj", "{40A6CA2A-6A59-4A45-8A58-155080BCCC0A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalytics.Client.IntegrationTests", "LogAnalytics.Client.Tests\LogAnalytics.Client.IntegrationTests.csproj", "{CF2ED0C5-080B-460C-A578-BAADE19B22E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogAnalytics.Client.IntegrationTests", "LogAnalytics.Client.IntegrationTests\LogAnalytics.Client.IntegrationTests.csproj", "{CF2ED0C5-080B-460C-A578-BAADE19B22E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogAnalytics.Client.UnitTests", "LogAnalytics.Client.UnitTests\LogAnalytics.Client.UnitTests.csproj", "{B0CE6938-F21F-4C7A-AC62-6D03315169D0}"
 EndProject

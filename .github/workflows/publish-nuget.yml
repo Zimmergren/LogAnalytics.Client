@@ -28,9 +28,8 @@ jobs:
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
   build:
-    needs: [unittests,integrationtests] # ensure we run the integration tests before we start building and packaging.
+    needs: [unittests,integrationtests] # ensure we run the unit tests, and integration tests before we start building and packaging.
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: DevSkim

@@ -1,4 +1,6 @@
-﻿namespace LogAnalytics.Client.Tests.Helpers
+﻿using LogAnalytics.Client.IntegrationTests.Helpers;
+
+namespace LogAnalytics.Client.IntegrationTests.Helpers
 {
     public class TestSecrets
     {

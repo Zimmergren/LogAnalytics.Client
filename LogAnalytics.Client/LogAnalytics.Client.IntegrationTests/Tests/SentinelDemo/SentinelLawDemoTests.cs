@@ -1,11 +1,11 @@
-using LogAnalytics.Client.Tests.Helpers;
-using LogAnalytics.Client.Tests.SentinelDemoEntities;
+using LogAnalytics.Client.IntegrationTests.Helpers;
+using LogAnalytics.Client.IntegrationTests.SentinelDemoEntities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace LogAnalytics.Client.Tests
+namespace LogAnalytics.Client.IntegrationTests
 {
     [TestClass]
     public class SentinelLawDemoTests : TestsBase

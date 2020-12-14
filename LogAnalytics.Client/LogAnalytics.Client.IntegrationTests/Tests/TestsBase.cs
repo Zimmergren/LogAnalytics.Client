@@ -1,9 +1,10 @@
-﻿using LogAnalytics.Client.Tests.Helpers;
+﻿using LogAnalytics.Client.IntegrationTests.Helpers;
+using LogAnalytics.Client.IntegrationTests.Helpers;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
-namespace LogAnalytics.Client.Tests
+namespace LogAnalytics.Client.IntegrationTests
 {
     /// <summary>
     /// Helper class to wire up local configuration and secrets. 

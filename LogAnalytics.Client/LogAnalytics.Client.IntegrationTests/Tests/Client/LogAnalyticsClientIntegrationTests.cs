@@ -1,11 +1,12 @@
-using LogAnalytics.Client.Tests.Helpers;
-using LogAnalytics.Client.Tests.TestEntities;
+using LogAnalytics.Client.IntegrationTests.Tests.Client.TestEntities;
+using LogAnalytics.Client.IntegrationTests.Helpers;
+using LogAnalytics.Client.IntegrationTests.TestEntities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace LogAnalytics.Client.Tests
+namespace LogAnalytics.Client.IntegrationTests
 {
     /// <summary>
     /// Basic tests for the LogAnalyticsClient.

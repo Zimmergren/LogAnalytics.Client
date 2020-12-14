@@ -1,5 +1,6 @@
-﻿using LogAnalytics.Client.Tests.Helpers;
-using LogAnalytics.Client.Tests.TestEntities;
+﻿using LogAnalytics.Client.IntegrationTests.Tests.Client.TestEntities;
+using LogAnalytics.Client.IntegrationTests.Helpers;
+using LogAnalytics.Client.IntegrationTests.TestEntities;
 using Microsoft.Azure.OperationalInsights;
 using Microsoft.Rest.Azure.Authentication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LogAnalytics.Client.Tests
+namespace LogAnalytics.Client.IntegrationTests
 {
     [TestClass]
     public class End2EndTests : TestsBase
