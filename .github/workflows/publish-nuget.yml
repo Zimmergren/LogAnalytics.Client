@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2.1.0
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
-  build:
+  buildandpublish:
     needs: [unittests,integrationtests] # ensure we run the unit tests, and integration tests before we start building and packaging.
     runs-on: ubuntu-latest
     steps:
