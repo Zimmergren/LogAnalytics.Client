@@ -38,6 +38,8 @@ namespace LogAnalytics.Client
             WorkspaceId = workspaceId;
             SharedKey = sharedKey;
             RequestBaseUrl = $"https://{WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
+
+            httpClient = new HttpClient();
         }
 
 
