@@ -21,6 +21,7 @@ namespace LogAnalytics.Client.IntegrationTests
         private static string testIdentifierEntry;
         private static string testIdentifierEncodingEntry;
         private static string testIdentifierNullableEntry;
+        private static string testIdentifierLogTypeEntry;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
@@ -42,6 +43,8 @@ namespace LogAnalytics.Client.IntegrationTests
             testIdentifierEntry = $"test-id-{Guid.NewGuid()}";
             testIdentifierEncodingEntry = $"test-id-{Guid.NewGuid()}-ÅÄÖ@~#$%^&*()123";
             testIdentifierNullableEntry = $"test-id-{Guid.NewGuid()}";
+            testIdentifierLogTypeEntry = $"test-id-{Guid.NewGuid()}";
+
 
             // Initialize the LAW Client.
             LogAnalyticsClient logger = new LogAnalyticsClient(
@@ -95,7 +98,18 @@ namespace LogAnalytics.Client.IntegrationTests
             logger.SendLogEntry(nullableTestEntity, "endtoendlogs");
 
 
-            Thread.Sleep(6 * 1000 * 60);
+            // Test 5 prep: Verify we can use AlphaNum + Underscore for Log-Type.
+            var logTypeTestEntity = new DemoEntity
+            {
+                Criticality = "Critical",
+                Message = testIdentifierLogTypeEntry,
+                Priority = int.MaxValue - 1,
+                SystemSource = "logtypetest"
+            };
+            logger.SendLogEntry(logTypeTestEntity, "log_name_123");
+
+            // Unfortunately, from the time we send the logs, until they appear in LAW, takes a few minutes. 
+            Thread.Sleep(7 * 1000 * 60);
         }
 
         [TestMethod]
@@ -149,6 +163,19 @@ namespace LogAnalytics.Client.IntegrationTests
             Assert.AreEqual(true, entry.ContainsKey("WithValue_d"));
             Assert.AreEqual($"{int.MaxValue - 20000}", entry["WithValue_d"]);
             Assert.AreEqual(false, entry.ContainsKey("NoValue_d"));
+        }
+
+        [TestMethod]
+        public void E2E_VerifySendLogEntry_LogTypeName_Test()
+        {
+            var query = _dataClient.Query($"log_name_123_CL | where Message == '{testIdentifierLogTypeEntry}' | order by TimeGenerated desc | limit 10");
+            Assert.AreEqual(1, query.Results.Count());
+
+            var entry = query.Results.First();
+            Assert.AreEqual($"{testIdentifierLogTypeEntry}", entry["Message"]);
+            Assert.AreEqual("logtypetest", entry["SystemSource_s"]);
+            Assert.AreEqual("Critical", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
         }
 
         // TODO: Enhance test coverage in the E2E tests

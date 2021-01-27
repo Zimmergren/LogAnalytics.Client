@@ -34,6 +34,9 @@ namespace LogAnalytics.Client
 
             if (string.IsNullOrEmpty(sharedKey))
                 throw new ArgumentNullException(nameof(sharedKey), "sharedKey cannot be null or empty");
+
+            if (!IsBase64String(sharedKey))
+                throw new ArgumentException($"{nameof(sharedKey)} must be a valid Base64 encoded string", nameof(sharedKey));
             
             WorkspaceId = workspaceId;
             SharedKey = sharedKey;
@@ -63,8 +66,8 @@ namespace LogAnalytics.Client
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
 
-            if (!IsAlphaOnly(logType))
-                throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain alpha characters. It does not support numerics or special characters.");
+            if (!IsAlphaNumUnderscore(logType))
+                throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain letters, numbers, and underscore (_). It does not support numerics or special characters.");
 
             ValidatePropertyTypes(entity);
 
@@ -92,14 +95,11 @@ namespace LogAnalytics.Client
             if (string.IsNullOrEmpty(logType))
                 throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
 
-            //if (string.IsNullOrEmpty(logType))
-            //    throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
-
             if (logType.Length > 100)
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
 
-            if (!IsAlphaOnly(logType))
-                throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain alpha characters. It does not support numerics or special characters.");
+            if (!IsAlphaNumUnderscore(logType))
+                throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain letters, numbers, and underscore (_). It does not support numerics or special characters.");
 
             foreach (var entity in entities)
                 ValidatePropertyTypes(entity);
@@ -155,6 +155,18 @@ namespace LogAnalytics.Client
         {
             return Regex.IsMatch(str, @"^[a-zA-Z]+$");
         }
+
+        private bool IsAlphaNumUnderscore(string str)
+        {
+            return Regex.IsMatch(str, @"^[a-zA-Z0-9_]+$");
+        }
+
+        private bool IsBase64String(string str)
+        {
+            str = str.Trim();
+            return (str.Length % 4 == 0) && Regex.IsMatch(str, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
+        }
+
         private void ValidatePropertyTypes<T>(T entity)
         {
             // as of 2018-10-30, the allowed property types for log analytics, as defined here (https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api#record-type-and-properties) are: string, bool, double, datetime, guid.

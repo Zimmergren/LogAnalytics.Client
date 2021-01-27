@@ -1,14 +1,6 @@
-﻿using Autofac;
-using Autofac.Extras.Moq;
-using LogAnalytics.Client.UnitTests.TestEntities;
-using Moq;
-using Moq.Protected;
+﻿using LogAnalytics.Client.UnitTests.TestEntities;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace LogAnalytics.Client.IntegrationTests.UnitTests
@@ -39,11 +31,23 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
             Assert.Throws<ArgumentNullException>(act);
         }
 
+        [Theory]
+        [InlineData("bXlTaGFyZWRLZXk==="), InlineData("bXlTaGFyZWRLZXk"), InlineData("cats1")]
+        public void LogAnalyticsClient_InitializationThrowsArgumentNullException_IfSharedKeyIsNotBase64(string sharedKey)
+        {
+            // Arrange
+            // Act
+            void act() => new LogAnalyticsClient("workspace id", sharedKey);
+
+            // Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+
         [Fact]
         public void SendLogEntry_ThrowsArgumentNullException_IfEntityIsNull()
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntry<ValidTestEntity>(null, "logtype");
@@ -56,7 +60,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         public void SendLogEntries_ThrowsAggregateException_IfEntityIsNull()
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntries<ValidTestEntity>(null, "logtype").Wait();
@@ -69,7 +73,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         public void SendLogEntry_ThrowsArgumentOutOfRangeException_IfLogTypeLengthIsExceeded()
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntry<ValidTestEntity>(new ValidTestEntity(), "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ");
@@ -82,7 +86,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         public void SendLogEntries_ThrowsArgumentOutOfRangeException_IfLogTypeLengthIsExceeded()
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             Action act = () => client.SendLogEntries<ValidTestEntity>(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ").Wait();
@@ -92,11 +96,24 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         }
 
         [Theory]
-        [InlineData("ö"), InlineData("~"), InlineData("!"), InlineData("@")]
-        public void SendLogEntry_ThrowsArgumentOutOfRangeException_IfLogTypeContainsNonAlphanumericCharacters(string logType)
+        [
+            InlineData("ö"), 
+            InlineData("~"), 
+            InlineData("!"), 
+            InlineData("@"), 
+            InlineData("."), 
+            InlineData("l-o-g"),
+            InlineData("l_o-g"),
+            InlineData("l_o-1"),
+            InlineData("1_o-."),
+            InlineData("1.log"),
+            InlineData("log.1")
+
+        ]
+        public void SendLogEntry_ThrowsArgumentOutOfRangeException_IfLogTypeContainsAnythingExceptAlphanumericOrUnderscoreCharacters(string logType)
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntry<ValidTestEntity>(new ValidTestEntity(), logType);
@@ -110,7 +127,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         public void SendLogEntry_ThrowsArgumentOutOfRangeException_IfLogTypeIsNullOrEmpty(string logType)
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntry<ValidTestEntity>(new ValidTestEntity(), logType);
@@ -123,7 +140,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
         public void SendLogEntry_ThrowsArgumentOutOfRangeException_IfInvalidEntity()
         {
             // Arrange.
-            LogAnalyticsClient client = new LogAnalyticsClient("id", "key");
+            LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
             void act() => client.SendLogEntry<InvalidTestEntity>(new InvalidTestEntity(), "logtype");
