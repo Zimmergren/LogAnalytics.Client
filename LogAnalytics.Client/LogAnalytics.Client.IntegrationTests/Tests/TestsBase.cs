@@ -1,5 +1,4 @@
 ﻿using LogAnalytics.Client.IntegrationTests.Helpers;
-using LogAnalytics.Client.IntegrationTests.Helpers;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;

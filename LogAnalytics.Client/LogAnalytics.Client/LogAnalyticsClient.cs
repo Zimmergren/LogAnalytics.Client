@@ -124,10 +124,7 @@ namespace LogAnalytics.Client
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             request.Content = httpContent;
-
-#pragma warning disable SecurityIntelliSenseCS // MS Security rules violation: false positive, we already operate over HTTPS (SSL) here.
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
-#pragma warning restore SecurityIntelliSenseCS // MS Security rules violation
 
             // Bubble up exceptions if there are any, don't swallow them here. This lets consumers handle it better.
             response.EnsureSuccessStatusCode();
@@ -150,10 +147,6 @@ namespace LogAnalytics.Client
             }
 
             return $"SharedKey {WorkspaceId}:{signedString}";
-        }
-        private bool IsAlphaOnly(string str)
-        {
-            return Regex.IsMatch(str, @"^[a-zA-Z]+$");
         }
 
         private bool IsAlphaNumUnderscore(string str)

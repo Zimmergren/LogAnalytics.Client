@@ -25,6 +25,7 @@ namespace LogAnalytics.Client.IntegrationTests
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "TestContext parameter is required for a ClassInitialize method")]
         public static void Init(TestContext context)
         {
             // Wire up test secrets.

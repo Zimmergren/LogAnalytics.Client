@@ -89,7 +89,7 @@ namespace LogAnalytics.Client.IntegrationTests.UnitTests
             LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
-            Action act = () => client.SendLogEntries<ValidTestEntity>(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ").Wait();
+            void act() => client.SendLogEntries<ValidTestEntity>(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ").Wait();
 
             // Assert.
             Assert.Throws<AggregateException>(act);            
