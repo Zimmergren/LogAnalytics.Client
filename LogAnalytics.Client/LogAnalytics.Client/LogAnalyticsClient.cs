@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Options;
+
+using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -25,9 +28,10 @@ namespace LogAnalytics.Client
         /// <summary>
         /// Instantiate the LogAnalyticsClient object by specifying your Workspace Id and the Key.
         /// </summary>
+        /// <param name="client">HTTP Client instance</param>
         /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
         /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
-        public LogAnalyticsClient(string workspaceId, string sharedKey)
+        private LogAnalyticsClient(HttpClient client, string workspaceId, string sharedKey)
         {
             if (string.IsNullOrEmpty(workspaceId))
                 throw new ArgumentNullException(nameof(workspaceId), "workspaceId cannot be null or empty");
@@ -37,13 +41,24 @@ namespace LogAnalytics.Client
 
             if (!IsBase64String(sharedKey))
                 throw new ArgumentException($"{nameof(sharedKey)} must be a valid Base64 encoded string", nameof(sharedKey));
-            
+
             WorkspaceId = workspaceId;
             SharedKey = sharedKey;
             RequestBaseUrl = $"https://{WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
 
-            httpClient = new HttpClient();
+            httpClient = client;
         }
+
+        public LogAnalyticsClient(HttpClient client, IOptions<LogAnalyticsClientOptions> options)
+            : this(client, options.Value.WorkspaceId, options.Value.SharedKey) { }
+
+        /// <summary>
+        /// Instantiate the LogAnalyticsClient object by specifying your Workspace Id and the Key.
+        /// </summary>
+        /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
+        /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
+        public LogAnalyticsClient(string workspaceId, string sharedKey)
+            : this(new HttpClient(), workspaceId, sharedKey) { }
 
 
         /// <summary>
@@ -173,7 +188,7 @@ namespace LogAnalytics.Client
                     propertyInfo.PropertyType != typeof(double) &&
                     propertyInfo.PropertyType != typeof(double?) &&
                     propertyInfo.PropertyType != typeof(int) &&     // Represented as a double in the system.
-                    propertyInfo.PropertyType != typeof(int?) && 
+                    propertyInfo.PropertyType != typeof(int?) &&
                     propertyInfo.PropertyType != typeof(long) &&
                     propertyInfo.PropertyType != typeof(long?) &&
                     propertyInfo.PropertyType != typeof(DateTime) &&
