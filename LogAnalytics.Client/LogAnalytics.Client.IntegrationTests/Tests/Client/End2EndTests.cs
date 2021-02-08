@@ -22,10 +22,12 @@ namespace LogAnalytics.Client.IntegrationTests
         private static string testIdentifierEncodingEntry;
         private static string testIdentifierNullableEntry;
         private static string testIdentifierLogTypeEntry;
+        private static string testIdentifierResourceIdEntry;
+        private static string testIdentifierTimeGeneratedFieldEntry;
+        private static DateTime testTimeGeneratedDateStamp;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "TestContext parameter is required for a ClassInitialize method")]
         public static void Init(TestContext context)
         {
             // Wire up test secrets.
@@ -45,6 +47,9 @@ namespace LogAnalytics.Client.IntegrationTests
             testIdentifierEncodingEntry = $"test-id-{Guid.NewGuid()}-ÅÄÖ@~#$%^&*()123";
             testIdentifierNullableEntry = $"test-id-{Guid.NewGuid()}";
             testIdentifierLogTypeEntry = $"test-id-{Guid.NewGuid()}";
+            testIdentifierResourceIdEntry = $"test-id-{Guid.NewGuid()}";
+            testIdentifierTimeGeneratedFieldEntry = $"test-id-{Guid.NewGuid()}";
+            testTimeGeneratedDateStamp = DateTime.UtcNow.AddDays(-5);
 
 
             // Initialize the LAW Client.
@@ -109,8 +114,29 @@ namespace LogAnalytics.Client.IntegrationTests
             };
             logger.SendLogEntry(logTypeTestEntity, "log_name_123");
 
+            // Test 6 prep: Verify the ingestion of ResourceId.
+            var resourceIdTestEntity = new DemoEntity
+            {
+                Criticality = "Critical",
+                Message = testIdentifierResourceIdEntry,
+                Priority = int.MaxValue - 1,
+                SystemSource = "resourceidtest"
+            };
+            logger.SendLogEntry(resourceIdTestEntity, "endtoendlogs", resourceId: _secrets.LawSecrets.LawResourceId);
+
+            // Test 7 prep: Verify the ingestion of TimeGeneratedField.
+            var timeGeneratedFieldTestEntity = new CustomTimeGeneratedTestEntity
+            {
+                Criticality = "Critical",
+                Message = testIdentifierTimeGeneratedFieldEntry,
+                Priority = int.MaxValue - 1,
+                SystemSource = "timegeneratedfieldtest",
+                CustomDateTime = testTimeGeneratedDateStamp
+            };
+            logger.SendLogEntry(timeGeneratedFieldTestEntity, "endtoendtimelogs", timeGeneratedCustomFieldName: "CustomDateTime");
+
             // Unfortunately, from the time we send the logs, until they appear in LAW, takes a few minutes. 
-            Thread.Sleep(7 * 1000 * 60);
+            Thread.Sleep(8 * 1000 * 60);
         }
 
         [TestMethod]
@@ -177,6 +203,40 @@ namespace LogAnalytics.Client.IntegrationTests
             Assert.AreEqual("logtypetest", entry["SystemSource_s"]);
             Assert.AreEqual("Critical", entry["Criticality_s"]);
             Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
+        }
+
+        [TestMethod]
+        public void E2E_VerifySendLogEntry_ResourceId_Test()
+        {
+            var query = _dataClient.Query($"endtoendlogs_CL | where Message == '{testIdentifierResourceIdEntry}' | order by TimeGenerated desc | limit 10");
+            Assert.AreEqual(1, query.Results.Count());
+
+            var entry = query.Results.First();
+            Assert.AreEqual($"{testIdentifierResourceIdEntry}", entry["Message"]);
+            Assert.AreEqual("resourceidtest", entry["SystemSource_s"]);
+            Assert.AreEqual("Critical", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
+
+            // Assert: that the returned Resource ID exist and matches our specicified resource id.
+            Assert.AreEqual(_secrets.LawSecrets.LawResourceId, entry["_ResourceId"]);
+        }
+
+        [TestMethod]
+        public void E2E_VerifySendLogEntry_TimeGeneratedField_Test()
+        {
+            var query = _dataClient.Query($"endtoendtimelogs_CL | where Message == '{testIdentifierTimeGeneratedFieldEntry}'");
+            Assert.AreEqual(1, query.Results.Count());
+
+            var entry = query.Results.First();
+            Assert.AreEqual($"{testIdentifierTimeGeneratedFieldEntry}", entry["Message"]);
+            Assert.AreEqual("timegeneratedfieldtest", entry["SystemSource_s"]);
+            Assert.AreEqual("Critical", entry["Criticality_s"]);
+            Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
+
+            // Assert: that the time stamp is accurate, and reflects our custom datetime field. Time format of the field needs to be based on ISO 8601, which in C# mathes this DateTime.ToString() format: yyyy-MM-ddThh:mm:ssZ
+            var testTimestamp = testTimeGeneratedDateStamp.ToString("yyyy-MM-ddThh:mm:ssZ");
+            var returnedTimestamp = DateTime.Parse(entry["TimeGenerated"]).ToUniversalTime().ToString("yyyy-MM-ddThh:mm:ssZ");
+            Assert.AreEqual(testTimestamp, returnedTimestamp);
         }
 
         // TODO: Enhance test coverage in the E2E tests

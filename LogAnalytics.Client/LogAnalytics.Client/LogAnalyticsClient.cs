@@ -53,7 +53,7 @@ namespace LogAnalytics.Client
         /// <param name="entity">The object</param>
         /// <param name="logType">The log type</param>
         /// <returns>Does not return anything.</returns>
-        public Task SendLogEntry<T>(T entity, string logType)
+        public Task SendLogEntry<T>(T entity, string logType, string resourceId = null, string timeGeneratedCustomFieldName = null)
         {
             #region Argument validation
 
@@ -74,7 +74,7 @@ namespace LogAnalytics.Client
             #endregion
 
             List<T> list = new List<T> { entity };
-            return SendLogEntries(list, logType);
+            return SendLogEntries(list, logType, resourceId, timeGeneratedCustomFieldName);
         }
 
 
@@ -85,7 +85,7 @@ namespace LogAnalytics.Client
         /// <param name="entities">The collection of objects</param>
         /// <param name="logType">The log type</param>
         /// <returns>Does not return anything.</returns>
-        public async Task SendLogEntries<T>(List<T> entities, string logType)
+        public async Task SendLogEntries<T>(List<T> entities, string logType, string resourceId = null, string timeGeneratedCustomFieldName = null)
         {
             #region Argument validation
 
@@ -104,9 +104,11 @@ namespace LogAnalytics.Client
             foreach (var entity in entities)
                 ValidatePropertyTypes(entity);
 
+            // Room for improvement: Identify if there is a timeGeneratedCustomFieldName specified, and if so, ensure the value of the field conforms with the ISO 8601 datetime format.
+
             #endregion
 
-            var dateTimeNow = DateTime.UtcNow.ToString("r");
+            var dateTimeNow = DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture);
 
             var entityAsJson = JsonConvert.SerializeObject(entities, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
@@ -118,7 +120,16 @@ namespace LogAnalytics.Client
             request.Headers.Add("Log-Type", logType);
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("x-ms-date", dateTimeNow);
-            request.Headers.Add("time-generated-field", ""); // if we want to extend this in the future to support custom date fields from the entity etc.
+            if (!string.IsNullOrWhiteSpace(timeGeneratedCustomFieldName))
+            {
+                // The name of the field that contains custom timestamp data.
+                request.Headers.Add("time-generated-field", timeGeneratedCustomFieldName);
+            }
+            if (!string.IsNullOrWhiteSpace(resourceId))
+            {
+                // The Resource ID in Azure for a given resource to connect the logs with.
+                request.Headers.Add("x-ms-AzureResourceId", resourceId);
+            }
 
             HttpContent httpContent = new StringContent(entityAsJson, Encoding.UTF8);
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");

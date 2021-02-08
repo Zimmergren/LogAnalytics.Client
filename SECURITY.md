@@ -6,6 +6,7 @@ We apply security updates as applicable to the latest version of the LogAnalytic
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.2.0   | :white_check_mark: |
 | 1.1.3   | :white_check_mark: |
 | 1.1.2   | :white_check_mark: |
 | 1.1.1   | :white_check_mark: |
