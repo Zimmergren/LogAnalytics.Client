@@ -20,12 +20,15 @@ namespace ConsoleAppDemo
                 .AddUserSecrets<Program>() // or user secrets
                 .Build();
 
+            // create DI container
             var services = new ServiceCollection()
-                .AddLogAnalyticsClient(configuration.GetSection("LogAnalytics"))
+                .AddLogAnalyticsClient(configuration.GetSection("LogAnalytics")) // register LogAnalyticsClient witch configuration
                 .BuildServiceProvider();
 
+            // get instance from DI container
             var logger = services.GetRequiredService<LogAnalyticsClient>();
 
+            // use LogAnalyticsClient
             await logger.SendLogEntry(new TestEntity
             {
                 Category = "Foo",
