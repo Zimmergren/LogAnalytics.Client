@@ -20,6 +20,7 @@ jobs:
           GHA_LAW_PRINCIPAL_CLIENTID: "${{secrets.GHA_LAW_PRINCIPAL_CLIENTID}}"
           GHA_LAW_PRINCIPAL_CLIENTSECRET: "${{secrets.GHA_LAW_PRINCIPAL_CLIENTSECRET}}"
           GHA_LAW_PRINCIPAL_DOMAIN: "${{secrets.GHA_LAW_PRINCIPAL_DOMAIN}}"
+          GHA_LAW_RESOURCE_ID: "${{secrets.GHA_LAW_RESOURCE_ID}}"
   unittests:
     name: Unit Tests
     runs-on: windows-latest

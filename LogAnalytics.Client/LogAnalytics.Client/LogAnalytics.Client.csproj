@@ -9,7 +9,7 @@
 The easiest way to send logs to Azure Log Analytics from your .NET Core applications.</Description>
     <PackageProjectUrl>https://github.com/Zimmergren/LogAnalytics.Client</PackageProjectUrl>
     <PackageId>LogAnalytics.Client</PackageId>
-    <Version>1.1.3</Version>    
+    <Version>1.2.0</Version>    
     <PackageDescription>A .NET Core client for Azure Log Analytics</PackageDescription>
     <RepositoryUrl>https://github.com/Zimmergren/LogAnalytics.Client</RepositoryUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>

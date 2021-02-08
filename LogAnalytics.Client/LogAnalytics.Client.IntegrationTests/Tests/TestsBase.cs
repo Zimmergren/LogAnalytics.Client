@@ -36,6 +36,7 @@ namespace LogAnalytics.Client.IntegrationTests
             string lawPrincipalClientId;
             string lawPrincipalClientSecret;
             string lawPrincipalDomain;
+            string lawResourceId;
             
             try
             {
@@ -52,6 +53,7 @@ namespace LogAnalytics.Client.IntegrationTests
                     lawPrincipalClientId = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTID");
                     lawPrincipalClientSecret = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTSECRET");
                     lawPrincipalDomain = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_DOMAIN");
+                    lawResourceId = Environment.GetEnvironmentVariable("GHA_LAW_RESOURCE_ID");
                 }
                 else
                 {
@@ -67,6 +69,7 @@ namespace LogAnalytics.Client.IntegrationTests
                 var lawConfigurationSection = configuration.GetSection("LawConfiguration");
                 lawId = lawConfigurationSection["LawId"];
                 lawKey = lawConfigurationSection["LawKey"];
+                lawResourceId = lawConfigurationSection["LawResourceId"];
 
                 var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
                 lawPrincipalClientId = lawPrincipalSection["ClientId"];
@@ -77,7 +80,8 @@ namespace LogAnalytics.Client.IntegrationTests
             LawSecrets lawSecrets = new LawSecrets
             {
                 LawId = lawId,
-                LawKey = lawKey
+                LawKey = lawKey,
+                LawResourceId = lawResourceId
             };
 
             LawPrincipalCredentials lawPrincipalCredentials = new LawPrincipalCredentials

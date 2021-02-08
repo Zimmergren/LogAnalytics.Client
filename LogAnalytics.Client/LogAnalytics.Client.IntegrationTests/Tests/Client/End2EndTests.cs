@@ -1,4 +1,4 @@
-﻿using LogAnalytics.Client.IntegrationTests.Tests.Client.TestEntities;
+using LogAnalytics.Client.IntegrationTests.Tests.Client.TestEntities;
 using LogAnalytics.Client.IntegrationTests.Helpers;
 using LogAnalytics.Client.IntegrationTests.TestEntities;
 using Microsoft.Azure.OperationalInsights;
