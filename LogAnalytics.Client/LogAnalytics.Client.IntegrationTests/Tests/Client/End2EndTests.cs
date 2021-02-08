@@ -2,13 +2,12 @@
 using LogAnalytics.Client.IntegrationTests.Helpers;
 using LogAnalytics.Client.IntegrationTests.TestEntities;
 using Microsoft.Azure.OperationalInsights;
-using Microsoft.Rest.Azure.Authentication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LogAnalytics.Client.IntegrationTests
 {
@@ -22,6 +21,7 @@ namespace LogAnalytics.Client.IntegrationTests
         private static string testIdentifierEncodingEntry;
         private static string testIdentifierNullableEntry;
         private static string testIdentifierLogTypeEntry;
+        private static string diTestId;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
@@ -32,7 +32,7 @@ namespace LogAnalytics.Client.IntegrationTests
             _secrets = InitSecrets();
 
             // Get a data client, helping us actually Read data, too.
-            _dataClient = GetLawDataClient(
+            _dataClient = LawDataClientHelper.GetLawDataClient(
                 _secrets.LawSecrets.LawId, 
                 _secrets.LawPrincipalCredentials.ClientId, 
                 _secrets.LawPrincipalCredentials.ClientSecret, 
@@ -45,6 +45,7 @@ namespace LogAnalytics.Client.IntegrationTests
             testIdentifierEncodingEntry = $"test-id-{Guid.NewGuid()}-ÅÄÖ@~#$%^&*()123";
             testIdentifierNullableEntry = $"test-id-{Guid.NewGuid()}";
             testIdentifierLogTypeEntry = $"test-id-{Guid.NewGuid()}";
+            diTestId = $"test-id-di-{Guid.NewGuid()}";
 
 
             // Initialize the LAW Client.
@@ -109,8 +110,30 @@ namespace LogAnalytics.Client.IntegrationTests
             };
             logger.SendLogEntry(logTypeTestEntity, "log_name_123");
 
+            // 
+            // DI LOGGER
+            //
+            var provider = new ServiceCollection()
+                .AddLogAnalyticsClient(c =>
+                {
+                    c.WorkspaceId = _secrets.LawSecrets.LawId;
+                    c.SharedKey = _secrets.LawSecrets.LawKey;
+                }).BuildServiceProvider();
+
+            var diLogger = provider.GetRequiredService<LogAnalyticsClient>();
+
+            // Send a log entry to verify it works.
+            diLogger.SendLogEntry(new DemoEntity
+            {
+                Criticality = "e2ecritical",
+                Message = diTestId,
+                SystemSource = "e2ewithdi",
+                Priority = int.MinValue + 1
+            }, "endtoendwithdilogs");
+
+
             // Unfortunately, from the time we send the logs, until they appear in LAW, takes a few minutes. 
-            Thread.Sleep(7 * 1000 * 60);
+            Thread.Sleep(8 * 1000 * 60);
         }
 
         [TestMethod]
@@ -179,34 +202,19 @@ namespace LogAnalytics.Client.IntegrationTests
             Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
         }
 
-        // TODO: Enhance test coverage in the E2E tests
-        // - Cover custom types and entities
-        // - Cover huge amounts of data
-
-        private static async Task<OperationalInsightsDataClient> GetLawDataClient(string workspaceId, string lawPrincipalClientId, string lawPrincipalClientSecret, string domain)
+        [TestMethod]
+        public void E2E_VerifySendLogEntryWithDIClient_Test()
         {
-            // Note 2020-07-26. This is from the Microsoft.Azure.OperationalInsights nuget, which haven't been updated since 2018. 
-            // Possibly we'll look for a REST-approach instead, and create the proper client here.
+            // Arrange & Act
+            var query = _dataClient.Query($"endtoendwithdilogs_CL | where Message == '{diTestId}' | limit 5");
+            Assert.AreEqual(1, query.Results.Count());
+            var entry = query.Results.First();
 
-            var authEndpoint = "https://login.microsoftonline.com";
-            var tokenAudience = "https://api.loganalytics.io/";
-
-            var adSettings = new ActiveDirectoryServiceSettings
-            {
-                AuthenticationEndpoint = new Uri(authEndpoint),
-                TokenAudience = new Uri(tokenAudience),
-                ValidateAuthority = true
-            };
-
-            var credentials = await ApplicationTokenProvider.LoginSilentAsync(domain, lawPrincipalClientId, lawPrincipalClientSecret, adSettings);
-
-            var client = new OperationalInsightsDataClient(credentials)
-            {
-                WorkspaceId = workspaceId
-            };
-
-            return client;
+            // Assert.
+            Assert.AreEqual(diTestId, entry["Message"]);
+            Assert.AreEqual("e2ecritical", entry["Criticality_s"]);
+            Assert.AreEqual("e2ewithdi", entry["SystemSource_s"]);
+            Assert.AreEqual($"{int.MinValue + 1}", entry["Priority_d"]);
         }
-
     }
 }

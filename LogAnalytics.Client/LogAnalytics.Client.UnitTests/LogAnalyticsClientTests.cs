@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace LogAnalytics.Client.IntegrationTests.UnitTests
+namespace LogAnalytics.Client.UnitTests
 {
     public class LogAnalyticsClientTests
     {

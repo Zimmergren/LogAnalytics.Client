@@ -20,7 +20,7 @@ namespace LogAnalytics.Client.UnitTests
                 .AddLogAnalyticsClient(c =>
             {
                 c.WorkspaceId = "workspaceId";
-                c.SharedKey = Convert.ToBase64String(Encoding.UTF8.GetBytes("sharredKey"));
+                c.SharedKey = Convert.ToBase64String(Encoding.UTF8.GetBytes("sharedKey"));
             }).BuildServiceProvider();
 
             // Act
@@ -38,7 +38,7 @@ namespace LogAnalytics.Client.UnitTests
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
                     { "LogAnalytics:WorkspaceId", "workspaceId" },
-                    { "LogAnalytics:SharedKey", Convert.ToBase64String(Encoding.UTF8.GetBytes("sharredKey")) }
+                    { "LogAnalytics:SharedKey", Convert.ToBase64String(Encoding.UTF8.GetBytes("sharedKey")) }
                 })
                 .Build();
 
