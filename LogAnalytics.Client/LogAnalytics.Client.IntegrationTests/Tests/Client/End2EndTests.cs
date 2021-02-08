@@ -25,6 +25,7 @@ namespace LogAnalytics.Client.IntegrationTests
         private static string testIdentifierResourceIdEntry;
         private static string testIdentifierTimeGeneratedFieldEntry;
         private static DateTime testTimeGeneratedDateStamp;
+        private static string testResourceId;
 
         // Init: push some data into the LAW, then wait for a bit, then we'll run all the e2e tests.
         [ClassInitialize]
@@ -50,6 +51,8 @@ namespace LogAnalytics.Client.IntegrationTests
             testIdentifierResourceIdEntry = $"test-id-{Guid.NewGuid()}";
             testIdentifierTimeGeneratedFieldEntry = $"test-id-{Guid.NewGuid()}";
             testTimeGeneratedDateStamp = DateTime.UtcNow.AddDays(-5);
+
+            testResourceId = _secrets.LawSecrets.LawResourceId;
 
 
             // Initialize the LAW Client.
@@ -122,7 +125,7 @@ namespace LogAnalytics.Client.IntegrationTests
                 Priority = int.MaxValue - 1,
                 SystemSource = "resourceidtest"
             };
-            logger.SendLogEntry(resourceIdTestEntity, "endtoendlogs", resourceId: _secrets.LawSecrets.LawResourceId);
+            logger.SendLogEntry(resourceIdTestEntity, "endtoendlogs", resourceId: testResourceId);
 
             // Test 7 prep: Verify the ingestion of TimeGeneratedField.
             var timeGeneratedFieldTestEntity = new CustomTimeGeneratedTestEntity
@@ -218,7 +221,7 @@ namespace LogAnalytics.Client.IntegrationTests
             Assert.AreEqual($"{int.MaxValue - 1}", entry["Priority_d"]);
 
             // Assert: that the returned Resource ID exist and matches our specicified resource id.
-            Assert.AreEqual(_secrets.LawSecrets.LawResourceId, entry["_ResourceId"]);
+            Assert.AreEqual(testResourceId, entry["_ResourceId"]);
         }
 
         [TestMethod]
