@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using LogAnalytics.Client;
 
 namespace BlazorDemo.Data
 {
@@ -11,15 +14,27 @@ namespace BlazorDemo.Data
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
+        private readonly LogAnalyticsClient _logger;
+
+        public WeatherForecastService(LogAnalyticsClient logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task<List<WeatherForecast>> GetForecastAsync(DateTime startDate)
         {
             var rng = new Random();
-            return Task.FromResult(Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var forecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = startDate.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
-            }).ToArray());
+            }).ToList();
+
+            // send weather forecasts in to Log Analytics
+            await _logger.SendLogEntries(forecast, "forecasts");
+
+            return forecast;
         }
     }
 }
