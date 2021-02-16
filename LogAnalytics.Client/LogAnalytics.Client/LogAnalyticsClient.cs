@@ -128,8 +128,7 @@ namespace LogAnalytics.Client
             var entityAsJson = JsonConvert.SerializeObject(entities, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, RequestBaseUrl);
-
+            using var request = new HttpRequestMessage(HttpMethod.Post, RequestBaseUrl);
             request.Headers.Clear();
             request.Headers.Add("Authorization", authSignature);
             request.Headers.Add("Log-Type", logType);

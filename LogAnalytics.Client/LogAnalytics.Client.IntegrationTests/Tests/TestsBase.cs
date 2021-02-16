@@ -9,21 +9,8 @@ namespace LogAnalytics.Client.IntegrationTests
     /// Helper class to wire up local configuration and secrets. 
     /// When running this from a local dev box, user secrets are used for the Law Id and Law Key.
     /// </summary>
-    public class TestsBase
+    public static class TestsBase
     {
-        /* For reference, this is the secrets.json file structure: 
-            {
-              "LawConfiguration": {
-                "LawId": "",
-                "LawKey": ""
-              },
-              "LawServicePrincipalCredentials": {
-                "ClientId": "",
-                "ClientSecret": "",
-                "Domain": ""
-              }
-            }
-         */
         public static TestSecrets InitSecrets()
         {
             var configBuilder = new ConfigurationBuilder()
@@ -57,7 +44,7 @@ namespace LogAnalytics.Client.IntegrationTests
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("The environment variable 'SECRETS_LOCATION' needs to have a value of GitHubActions, or not exist");
+                    throw new NullReferenceException("The environment variable 'SECRETS_LOCATION' needs to have a value of GitHubActions, or not exist");
                 }
             }
             catch
