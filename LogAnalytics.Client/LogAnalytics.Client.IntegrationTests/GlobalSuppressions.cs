@@ -5,5 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "The method must be static, public, does not return a value and should take a single parameter of type TestContext. Therefore we exclude warnings on TestContext here.", Scope = "member", Target = "~M:LogAnalytics.Client.IntegrationTests.LogAnalyticsClientIntegrationTests.ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)")]
 [assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "The method must be static, public, does not return a value and should take a single parameter of type TestContext. Therefore we exclude warnings on TestContext here.", Scope = "member", Target = "~M:LogAnalytics.Client.IntegrationTests.SentinelLawDemoTests.ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)")]
