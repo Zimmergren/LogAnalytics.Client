@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace LogAnalytics.Client.IntegrationTests
 {
     [TestClass]
-    public class End2EndTests : TestsBase
+    public class End2EndTests
     {
         private static OperationalInsightsDataClient _dataClient;
         private static TestSecrets _secrets;
@@ -29,7 +29,7 @@ namespace LogAnalytics.Client.IntegrationTests
         public static void Init(TestContext context)
         {
             // Wire up test secrets.
-            _secrets = InitSecrets();
+            _secrets = TestsBase.InitSecrets();
 
             // Get a data client, helping us actually Read data, too.
             _dataClient = LawDataClientHelper.GetLawDataClient(

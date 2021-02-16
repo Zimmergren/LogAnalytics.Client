@@ -8,7 +8,7 @@
 
     public class AnotherCustomClass
     {
-        public enum MyEnum
+        public enum MyCustomEnumeration
         {
             Val1,
             Val2
