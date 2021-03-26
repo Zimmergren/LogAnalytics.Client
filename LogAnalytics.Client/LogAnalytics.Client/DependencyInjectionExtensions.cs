@@ -1,18 +1,14 @@
 ﻿using System;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LogAnalytics.Client
 {
+    /// <summary>
+    /// Enables LogAnalyticsClient to be injected through Dependency Injection.
+    /// </summary>
     public static class DependencyInjectionExtensions
     {
-        private static IServiceCollection AddLogAnalyticsClient(this IServiceCollection services)
-        {
-            services.AddHttpClient<LogAnalyticsClient>();
-            return services;
-        }
-
         /// <summary>
         /// Add Log Analytics Client to the service container using HTTP Client Factory.
         /// </summary>
@@ -30,11 +26,17 @@ namespace LogAnalytics.Client
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
         /// <param name="configuration">Configuration or configuration section.</param>
-        /// <returns></returns>
+        /// <returns>The <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddLogAnalyticsClient(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions<LogAnalyticsClientOptions>().Bind(configuration);
             return services.AddLogAnalyticsClient();
+        }
+
+        private static IServiceCollection AddLogAnalyticsClient(this IServiceCollection services)
+        {
+            services.AddHttpClient<LogAnalyticsClient>();
+            return services;
         }
     }
 }
