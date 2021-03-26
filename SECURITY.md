@@ -6,14 +6,11 @@ We apply regular- and security updates as applicable to LogAnalytics.Client.
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.3.2   | :white_check_mark: |
+| 1.3.1   | :white_check_mark: |
 | 1.3.0   | :white_check_mark: |
 | 1.3.0   | :white_check_mark: |
 | 1.2.0   | :white_check_mark: |
-| 1.1.3   | :white_check_mark: |
-| 1.1.2   | :white_check_mark: |
-| 1.1.1   | :white_check_mark: |
-| 1.1.0   | :white_check_mark: |
-
 
 ## Reporting a Vulnerability
 

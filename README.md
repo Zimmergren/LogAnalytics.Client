@@ -25,7 +25,7 @@ Install-Package LogAnalytics.Client
 
 #### Install by adding a PackageReference to csproj
 ```xml
-<PackageReference Include="LogAnalytics.Client" Version="1.3.1" />
+<PackageReference Include="LogAnalytics.Client" Version="1.3.2" />
 ```
 
 #### Install using Paket CLI
