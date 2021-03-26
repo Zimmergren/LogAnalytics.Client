@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-
-using Newtonsoft.Json;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +7,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace LogAnalytics.Client
 {
@@ -19,14 +17,16 @@ namespace LogAnalytics.Client
     /// </summary>
     public class LogAnalyticsClient : ILogAnalyticsClient
     {
+        private readonly HttpClient _httpClient;
+
         private string WorkspaceId { get; }
+
         private string SharedKey { get; }
+
         private string RequestBaseUrl { get; }
 
-        private readonly HttpClient httpClient;
-
         /// <summary>
-        /// Instantiate the LogAnalyticsClient object by specifying your Workspace Id and the Key.
+        /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
         /// </summary>
         /// <param name="client">HTTP Client instance</param>
         /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
@@ -34,32 +34,44 @@ namespace LogAnalytics.Client
         private LogAnalyticsClient(HttpClient client, string workspaceId, string sharedKey)
         {
             if (string.IsNullOrEmpty(workspaceId))
+            {
                 throw new ArgumentNullException(nameof(workspaceId), "workspaceId cannot be null or empty");
+            }
 
             if (string.IsNullOrEmpty(sharedKey))
+            {
                 throw new ArgumentNullException(nameof(sharedKey), "sharedKey cannot be null or empty");
+            }
 
-            if (!IsBase64String(sharedKey))
+            if (!this.IsBase64String(sharedKey))
+            {
                 throw new ArgumentException($"{nameof(sharedKey)} must be a valid Base64 encoded string", nameof(sharedKey));
+            }
 
-            WorkspaceId = workspaceId;
-            SharedKey = sharedKey;
-            RequestBaseUrl = $"https://{WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
+            this.WorkspaceId = workspaceId;
+            this.SharedKey = sharedKey;
+            this.RequestBaseUrl = $"https://{this.WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
 
-            httpClient = client;
+            this._httpClient = client;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="options"></param>
         public LogAnalyticsClient(HttpClient client, IOptions<LogAnalyticsClientOptions> options)
             : this(client, options.Value.WorkspaceId, options.Value.SharedKey) { }
 
         /// <summary>
-        /// Instantiate the LogAnalyticsClient object by specifying your Workspace Id and the Key.
+        /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
         /// </summary>
         /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
         /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
         public LogAnalyticsClient(string workspaceId, string sharedKey)
-            : this(new HttpClient(), workspaceId, sharedKey) { }
-
+            : this(new HttpClient(), workspaceId, sharedKey)
+        {
+        }
 
         /// <summary>
         /// Send an entity as a single log entry to Azure Log Analytics.
@@ -67,29 +79,34 @@ namespace LogAnalytics.Client
         /// <typeparam name="T">Entity Type</typeparam>
         /// <param name="entity">The object</param>
         /// <param name="logType">The log type</param>
+        /// <param name="resourceId">The resource id</param>
+        /// <param name="timeGeneratedCustomFieldName">The name of the field that contains the Time Generated data</param>
         /// <returns>Does not return anything.</returns>
         public Task SendLogEntry<T>(T entity, string logType, string resourceId = null, string timeGeneratedCustomFieldName = null)
         {
-            #region Argument validation
-
             if (entity == null)
+            {
                 throw new ArgumentNullException(nameof(entity), $"parameter '{nameof(entity)}' cannot be null");
+            }
 
             if (string.IsNullOrEmpty(logType))
+            {
                 throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
+            }
 
             if (logType.Length > 100)
+            {
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
+            }
 
-            if (!IsAlphaNumUnderscore(logType))
+            if (!this.IsAlphaNumUnderscore(logType))
+            {
                 throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain letters, numbers, and underscore (_). It does not support numerics or special characters.");
+            }
 
-            ValidatePropertyTypes(entity);
-
-            #endregion
-
+            this.ValidatePropertyTypes(entity);
             List<T> list = new List<T> { entity };
-            return SendLogEntries(list, logType, resourceId, timeGeneratedCustomFieldName);
+            return this.SendLogEntries(list, logType, resourceId, timeGeneratedCustomFieldName);
         }
 
 
@@ -99,36 +116,44 @@ namespace LogAnalytics.Client
         /// <typeparam name="T">The entity type</typeparam>
         /// <param name="entities">The collection of objects</param>
         /// <param name="logType">The log type</param>
+        /// <param name="resourceId">The resource id</param>
+        /// <param name="timeGeneratedCustomFieldName">The name of the field that contains the Time Generated data</param>
         /// <returns>Does not return anything.</returns>
         public async Task SendLogEntries<T>(List<T> entities, string logType, string resourceId = null, string timeGeneratedCustomFieldName = null)
         {
-            #region Argument validation
-
             if (entities == null)
+            {
                 throw new ArgumentNullException(nameof(entities), $"parameter '{nameof(entities)}' cannot be null");
+            }
 
             if (string.IsNullOrEmpty(logType))
+            {
                 throw new ArgumentNullException(nameof(logType), $"parameter '{nameof(logType)}' cannot be null, and must contain a string.");
+            }
 
             if (logType.Length > 100)
+            {
                 throw new ArgumentOutOfRangeException(nameof(logType), logType.Length, "The size limit for this parameter is 100 characters.");
+            }
 
-            if (!IsAlphaNumUnderscore(logType))
+            if (!this.IsAlphaNumUnderscore(logType))
+            {
                 throw new ArgumentOutOfRangeException(nameof(logType), logType, "Log-Type can only contain letters, numbers, and underscore (_). It does not support numerics or special characters.");
+            }
 
             foreach (var entity in entities)
-                ValidatePropertyTypes(entity);
+            {
+                this.ValidatePropertyTypes(entity);
+            }
 
             // Room for improvement: Identify if there is a timeGeneratedCustomFieldName specified, and if so, ensure the value of the field conforms with the ISO 8601 datetime format.
-
-            #endregion
 
             var dateTimeNow = DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture);
 
             var entityAsJson = JsonConvert.SerializeObject(entities, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            var authSignature = GetAuthSignature(entityAsJson, dateTimeNow);
+            var authSignature = this.GetAuthSignature(entityAsJson, dateTimeNow);
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, RequestBaseUrl);
+            using var request = new HttpRequestMessage(HttpMethod.Post, this.RequestBaseUrl);
             request.Headers.Clear();
             request.Headers.Add("Authorization", authSignature);
             request.Headers.Add("Log-Type", logType);
@@ -149,13 +174,11 @@ namespace LogAnalytics.Client
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             request.Content = httpContent;
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await this._httpClient.SendAsync(request).ConfigureAwait(false);
 
             // Bubble up exceptions if there are any, don't swallow them here. This lets consumers handle it better.
             response.EnsureSuccessStatusCode();
         }
-
-        #region Helpers
 
         private string GetAuthSignature(string serializedJsonObject, string dateString)
         {
@@ -163,7 +186,7 @@ namespace LogAnalytics.Client
             string signedString;
 
             var encoding = new ASCIIEncoding();
-            var sharedKeyBytes = Convert.FromBase64String(SharedKey);
+            var sharedKeyBytes = Convert.FromBase64String(this.SharedKey);
             var stringToSignBytes = encoding.GetBytes(stringToSign);
             using (var hmacsha256Encryption = new HMACSHA256(sharedKeyBytes))
             {
@@ -171,7 +194,7 @@ namespace LogAnalytics.Client
                 signedString = Convert.ToBase64String(hashBytes);
             }
 
-            return $"SharedKey {WorkspaceId}:{signedString}";
+            return $"SharedKey {this.WorkspaceId}:{signedString}";
         }
 
         private bool IsAlphaNumUnderscore(string str)
@@ -210,7 +233,5 @@ namespace LogAnalytics.Client
                 }
             }
         }
-
-        #endregion
     }
 }
