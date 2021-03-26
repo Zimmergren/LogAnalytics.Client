@@ -17,7 +17,7 @@ namespace LogAnalytics.Client
     /// </summary>
     public class LogAnalyticsClient : ILogAnalyticsClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient httpClient;
 
         private string WorkspaceId { get; }
 
@@ -52,7 +52,7 @@ namespace LogAnalytics.Client
             this.SharedKey = sharedKey;
             this.RequestBaseUrl = $"https://{this.WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
 
-            this._httpClient = client;
+            this.httpClient = client;
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace LogAnalytics.Client
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             request.Content = httpContent;
-            var response = await this._httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await this.httpClient.SendAsync(request).ConfigureAwait(false);
 
             // Bubble up exceptions if there are any, don't swallow them here. This lets consumers handle it better.
             response.EnsureSuccessStatusCode();
