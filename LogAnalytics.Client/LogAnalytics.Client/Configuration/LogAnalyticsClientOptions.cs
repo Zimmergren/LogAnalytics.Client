@@ -1,6 +1,4 @@
-﻿using LogAnalytics.Client.Configuration;
-
-namespace LogAnalytics.Client
+﻿namespace LogAnalytics.Client.Configuration
 {
     /// <summary>
     /// Log Analytics Client Options.
@@ -21,6 +19,6 @@ namespace LogAnalytics.Client
         /// <summary>
         /// Gets or sets the Azure Sovereign Cloud.
         /// </summary>
-        public AzureSovereignCloud AzureSovereignCloud { get;set; }
+        public string EndPointOverride { get; set; }
     }
 }
