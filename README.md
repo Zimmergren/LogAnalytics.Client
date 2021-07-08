@@ -28,7 +28,7 @@ Install-Package LogAnalytics.Client
 
 #### Install by adding a PackageReference to csproj
 ```xml
-<PackageReference Include="LogAnalytics.Client" Version="5.0.0" />
+<PackageReference Include="LogAnalytics.Client" Version="5.1.0" />
 ```
 
 #### Install using Paket CLI
@@ -93,6 +93,24 @@ for (int ii = 0; ii < 5000; ii++)
 await logger.SendLogEntries(entities, "demolog").ConfigureAwait(false);
 ```
 
+### Ship logs to another Azure Sovereign Cloud
+
+To send logs to another Azure Sovereign Cloud, for example the Government cloud, you can specify an enum value for the the optional parameter `azureSovereignCloud`.
+
+Here's an example: 
+
+```csharp
+LogAnalyticsClient logger = new LogAnalyticsClient(
+                workspaceId: "LAW ID",
+                sharedKey: "LAW KEY",
+                azureSovereignCloud: AzureSovereignCloud.AzureGovernment);
+```
+
+The available sovereign clouds are currently:
+
+- AzureSovereignCloud.AzurePublicCloud (ods.opinsights.azure.com)
+- AzureSovereignCloud.AzureGovernment (ods.opinsights.azure.us)
+- AzureSovereignCloud.AzureChina (ods.opinsights.azure.cn)
 
 ## Development 
 
