@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using LogAnalytics.Client.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -23,6 +24,8 @@ namespace LogAnalytics.Client
 
         private string SharedKey { get; }
 
+        private string AzureEndpoint { get;  }
+
         private string RequestBaseUrl { get; }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace LogAnalytics.Client
         /// <param name="client">HTTP Client instance</param>
         /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
         /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
-        private LogAnalyticsClient(HttpClient client, string workspaceId, string sharedKey)
+        private LogAnalyticsClient(HttpClient client, string workspaceId, string sharedKey, AzureSovereignCloud azureSovereignCloud = AzureSovereignCloud.AzurePublicCloud)
         {
             if (string.IsNullOrEmpty(workspaceId))
             {
@@ -48,9 +51,22 @@ namespace LogAnalytics.Client
                 throw new ArgumentException($"{nameof(sharedKey)} must be a valid Base64 encoded string", nameof(sharedKey));
             }
 
+            switch (azureSovereignCloud)
+            {
+                case AzureSovereignCloud.AzurePublicCloud:
+                    this.AzureEndpoint = "ods.opinsights.azure.com";
+                    break;
+                case AzureSovereignCloud.AzureGovernment:
+                    this.AzureEndpoint = "ods.opinsights.azure.us";
+                    break;
+                case AzureSovereignCloud.AzureChina:
+                    this.AzureEndpoint = "ods.opinsights.azure.cn";
+                    break;
+            }
+
             this.WorkspaceId = workspaceId;
             this.SharedKey = sharedKey;
-            this.RequestBaseUrl = $"https://{this.WorkspaceId}.ods.opinsights.azure.com/api/logs?api-version={Consts.ApiVersion}";
+            this.RequestBaseUrl = $"https://{this.WorkspaceId}.{this.AzureEndpoint}/api/logs?api-version={Consts.ApiVersion}";
 
             this.httpClient = client;
         }
@@ -58,18 +74,19 @@ namespace LogAnalytics.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="options"></param>
+        /// <param name="client">The HttpClient.</param>
+        /// <param name="options">LogAnalyticsClient options.</param>
         public LogAnalyticsClient(HttpClient client, IOptions<LogAnalyticsClientOptions> options)
-            : this(client, options.Value.WorkspaceId, options.Value.SharedKey) { }
+            : this(client, options.Value.WorkspaceId, options.Value.SharedKey, options.Value.AzureSovereignCloud) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
         /// </summary>
         /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
         /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
-        public LogAnalyticsClient(string workspaceId, string sharedKey)
-            : this(new HttpClient(), workspaceId, sharedKey)
+        /// <param name="azureSovereignCloud">The Azure Cloud to use.</param>
+        public LogAnalyticsClient(string workspaceId, string sharedKey, AzureSovereignCloud azureSovereignCloud = AzureSovereignCloud.AzurePublicCloud)
+            : this(new HttpClient(), workspaceId, sharedKey, azureSovereignCloud)
         {
         }
 
