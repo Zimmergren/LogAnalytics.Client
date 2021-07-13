@@ -11,7 +11,7 @@
         public const string ApiVersion = "2016-04-01";
 
         /// <summary>
-        /// Log Analytics Azure Commercial Endpoint
+        /// Log Analytics Azure Commercial Endpoint.
         /// </summary>
         public const string AzureCommercialEndpoint = "ods.opinsights.azure.com";
     }

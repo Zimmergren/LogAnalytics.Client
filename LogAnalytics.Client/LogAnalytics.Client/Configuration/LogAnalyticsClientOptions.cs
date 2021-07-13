@@ -19,6 +19,22 @@
         /// <summary>
         /// Gets or sets the Azure Sovereign Cloud.
         /// </summary>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <term>ods.opinsights.azure.com</term>
+        /// <description>(Default) The Azure Public Cloud.</description>
+        /// </item>
+        /// <item>
+        /// <term>ods.opinsights.azure.us</term>
+        /// <description>Azure Government.</description>
+        /// </item>
+        /// <item>
+        /// <term>ods.opinsights.azure.cn</term>
+        /// <description>Azure China.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
         public string EndPointOverride { get; set; }
     }
 }

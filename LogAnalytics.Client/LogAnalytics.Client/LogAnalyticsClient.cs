@@ -28,12 +28,6 @@ namespace LogAnalytics.Client
 
         private string RequestBaseUrl { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogAnalyticsClient"/> class.
-        /// </summary>
-        /// <param name="client">HTTP Client instance</param>
-        /// <param name="workspaceId">Azure Log Analytics Workspace ID</param>
-        /// <param name="sharedKey">Azure Log Analytics Workspace Shared Key</param>
         private LogAnalyticsClient(HttpClient client, string workspaceId, string sharedKey, string endPointOverride = null)
         {
             if (string.IsNullOrEmpty(workspaceId))
