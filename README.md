@@ -28,7 +28,7 @@ Install-Package LogAnalytics.Client
 
 #### Install by adding a PackageReference to csproj
 ```xml
-<PackageReference Include="LogAnalytics.Client" Version="5.1.0" />
+<PackageReference Include="LogAnalytics.Client" Version="5.2.0" />
 ```
 
 #### Install using Paket CLI
@@ -103,14 +103,14 @@ Here's an example:
 LogAnalyticsClient logger = new LogAnalyticsClient(
                 workspaceId: "LAW ID",
                 sharedKey: "LAW KEY",
-                azureSovereignCloud: AzureSovereignCloud.AzureGovernment);
+                EndPointOverride: "ods.opinsights.azure.us"); // Use Azure Government instead of the (default) Azure Public cloud.
 ```
 
 The available sovereign clouds are currently:
 
-- AzureSovereignCloud.AzurePublicCloud (ods.opinsights.azure.com)
-- AzureSovereignCloud.AzureGovernment (ods.opinsights.azure.us)
-- AzureSovereignCloud.AzureChina (ods.opinsights.azure.cn)
+- Azure Public Cloud (Commercial): ods.opinsights.azure.com
+- Azure Government: ods.opinsights.azure.us
+- Azure China: ods.opinsights.azure.cn
 
 ## Development 
 
