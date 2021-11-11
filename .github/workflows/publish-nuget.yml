@@ -10,7 +10,7 @@ jobs:
     name: Integration Tests
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v2.4.0
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.IntegrationTests
         env: 
@@ -25,7 +25,7 @@ jobs:
     name: Unit Tests
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v2.4.0
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
   buildandpublish:
@@ -33,13 +33,13 @@ jobs:
     needs: [unittests,integrationtests] # ensure we run the unit tests, and integration tests before we start building and packaging.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.4.0
     - name: DevSkim
       uses: microsoft/DevSkim-Action@v1
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.104
+        dotnet-version: 6.0.0
     - name: Install dependencies
       run: dotnet restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
@@ -47,7 +47,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
     - name: Publish LogAnalytics.Client
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: LogAnalytics.Client/LogAnalytics.Client/LogAnalytics.Client.csproj
           NUGET_KEY: ${{secrets.NUGET_LOGANALYTICS_APIKEY}}
