@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.0
+          dotnet-version: 6.0.100
       - uses: actions/checkout@v2.4.0
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.IntegrationTests
@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.0
+          dotnet-version: 6.0.100
       - uses: actions/checkout@v2.4.0
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
@@ -45,7 +45,7 @@ jobs:
     - name: Wire up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.0
+        dotnet-version: 6.0.100
     - name: Install dependencies
       run: dotnet restore
       working-directory: LogAnalytics.Client/LogAnalytics.Client
