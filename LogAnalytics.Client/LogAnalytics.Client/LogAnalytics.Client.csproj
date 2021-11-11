@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Zimmergren</Authors>
     <Company>Zimmergren</Company>
     <Product>LogAnalytics.Client</Product>
@@ -9,8 +9,8 @@
 The easiest way to send logs to Azure Log Analytics from your .NET Core applications.</Description>
     <PackageProjectUrl>https://github.com/Zimmergren/LogAnalytics.Client</PackageProjectUrl>
     <PackageId>LogAnalytics.Client</PackageId>
-    <Version>5.2.1</Version>    
-    <PackageDescription>A .NET Core client for Azure Log Analytics</PackageDescription>
+    <Version>6.0.0</Version>    
+    <PackageDescription>A .NET client for Azure Log Analytics. Compatible with .NET Core, .NET 5 and .NET 6</PackageDescription>
     <RepositoryUrl>https://github.com/Zimmergren/LogAnalytics.Client</RepositoryUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
@@ -33,10 +33,10 @@ The easiest way to send logs to Azure Log Analytics from your .NET Core applicat
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.OperationalInsights" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
       <PrivateAssets>all</PrivateAssets>
