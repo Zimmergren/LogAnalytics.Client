@@ -9,8 +9,16 @@ Construct a custom object and send it to Log Analytics. It will be represented a
 ## NuGet
 The [LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
 
-## Support for .NET 5
-The LogAnalytics.Client project has been upgraded to .NET 5, and bumped the major version to 5.x. 
+## Support for .NET 6
+The LogAnalytics.Client project has been upgraded to .NET 6, and bumped the major version to 6.x. 
+
+LogAnalytics.Client currently support the below versions of .NET.
+
+| Version | Supported          |
+| ------- | ------------------ |
+| .NET 6.x   | :white_check_mark: |
+| .NET 5.x   | :white_check_mark: |
+| .NET Core 3.x | :white_check_mark: |
 
 ## How to use the LogAnalytics Client
 
@@ -28,7 +36,7 @@ Install-Package LogAnalytics.Client
 
 #### Install by adding a PackageReference to csproj
 ```xml
-<PackageReference Include="LogAnalytics.Client" Version="5.2.1" />
+<PackageReference Include="LogAnalytics.Client" Version="6.0.0" />
 ```
 
 #### Install using Paket CLI
