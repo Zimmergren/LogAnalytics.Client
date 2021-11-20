@@ -24,6 +24,7 @@ namespace LogAnalytics.Client.IntegrationTests
             string lawPrincipalClientSecret;
             string lawPrincipalDomain;
             string lawResourceId;
+            string lawTenantId;
             
             try
             {
@@ -37,6 +38,7 @@ namespace LogAnalytics.Client.IntegrationTests
                     if (!string.IsNullOrEmpty(lawId))
                         Console.WriteLine($"Law ID variable is wired up: {lawId.Substring(0,5)}"); // produce something for the GitHub Actions log to verify if variables are wired up.
                     lawKey = Environment.GetEnvironmentVariable("GHA_LAW_KEY");
+                    lawTenantId = Environment.GetEnvironmentVariable("GHA_LAW_TENANTID");
                     lawPrincipalClientId = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTID");
                     lawPrincipalClientSecret = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTSECRET");
                     lawPrincipalDomain = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_DOMAIN");
@@ -59,6 +61,7 @@ namespace LogAnalytics.Client.IntegrationTests
                 lawResourceId = lawConfigurationSection["LawResourceId"];
 
                 var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
+                lawTenantId = lawPrincipalSection["TenantId"];
                 lawPrincipalClientId = lawPrincipalSection["ClientId"];
                 lawPrincipalClientSecret = lawPrincipalSection["ClientSecret"];
                 lawPrincipalDomain = lawPrincipalSection["Domain"];
@@ -73,6 +76,7 @@ namespace LogAnalytics.Client.IntegrationTests
 
             LawPrincipalCredentials lawPrincipalCredentials = new LawPrincipalCredentials
             {
+                TenantId = lawTenantId,
                 ClientId = lawPrincipalClientId,
                 ClientSecret = lawPrincipalClientSecret,
                 Domain = lawPrincipalDomain
