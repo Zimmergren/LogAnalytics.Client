@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <UserSecretsId>e3f53487-5566-4483-a2a8-c9dc912a3c25</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

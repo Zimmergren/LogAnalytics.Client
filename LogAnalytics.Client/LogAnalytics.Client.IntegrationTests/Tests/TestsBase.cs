@@ -22,8 +22,6 @@ namespace LogAnalytics.Client.IntegrationTests
             string lawKey;
             string lawPrincipalClientId;
             string lawPrincipalClientSecret;
-            string lawPrincipalDomain;
-            string lawResourceId;
             string lawTenantId;
             
             try
@@ -41,8 +39,6 @@ namespace LogAnalytics.Client.IntegrationTests
                     lawTenantId = Environment.GetEnvironmentVariable("GHA_LAW_TENANTID");
                     lawPrincipalClientId = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTID");
                     lawPrincipalClientSecret = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_CLIENTSECRET");
-                    lawPrincipalDomain = Environment.GetEnvironmentVariable("GHA_LAW_PRINCIPAL_DOMAIN");
-                    lawResourceId = Environment.GetEnvironmentVariable("GHA_LAW_RESOURCE_ID");
                 }
                 else
                 {
@@ -58,28 +54,24 @@ namespace LogAnalytics.Client.IntegrationTests
                 var lawConfigurationSection = configuration.GetSection("LawConfiguration");
                 lawId = lawConfigurationSection["LawId"];
                 lawKey = lawConfigurationSection["LawKey"];
-                lawResourceId = lawConfigurationSection["LawResourceId"];
 
                 var lawPrincipalSection = configuration.GetSection("LawServicePrincipalCredentials");
                 lawTenantId = lawPrincipalSection["TenantId"];
                 lawPrincipalClientId = lawPrincipalSection["ClientId"];
                 lawPrincipalClientSecret = lawPrincipalSection["ClientSecret"];
-                lawPrincipalDomain = lawPrincipalSection["Domain"];
             }
 
             LawSecrets lawSecrets = new LawSecrets
             {
                 LawId = lawId,
-                LawKey = lawKey,
-                LawResourceId = lawResourceId
+                LawKey = lawKey
             };
 
             LawPrincipalCredentials lawPrincipalCredentials = new LawPrincipalCredentials
             {
                 TenantId = lawTenantId,
                 ClientId = lawPrincipalClientId,
-                ClientSecret = lawPrincipalClientSecret,
-                Domain = lawPrincipalDomain
+                ClientSecret = lawPrincipalClientSecret
             };
 
             TestSecrets testSecrets = new TestSecrets
