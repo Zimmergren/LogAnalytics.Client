@@ -25,13 +25,6 @@ jobs:
           GHA_LAW_PRINCIPAL_DOMAIN: "${{secrets.GHA_LAW_PRINCIPAL_DOMAIN}}"
           GHA_LAW_RESOURCE_ID: "${{secrets.GHA_LAW_RESOURCE_ID}}"
           GHA_LAW_TENANTID: "${{secrets.GHA_LAW_TENANTID}}"
-      - name: Run Microsoft Security DevOps Analysis
-        uses: microsoft/security-devops-action@preview
-        id: msdo
-      - name: Upload alerts to Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
   unittests:
     name: Unit Tests
     runs-on: windows-latest
