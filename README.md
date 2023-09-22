@@ -1,15 +1,19 @@
 # LogAnalytics Client for .NET Core
+
 The easiest way to send logs to Azure Log Analytics from your apps.
 Construct a custom object and send it to Log Analytics. It will be represented as a log entry in the logs. This helps make logging easy in your applications, and you can focus on more important business logic.
 
 ## Build Status
+
 [![CI - Integration Tests - NuGet](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)](https://www.nuget.org/packages/loganalytics.client)
 ![CodeQL - Code Security](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CodeQL/badge.svg)
 
 ## NuGet
+
 The [LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
 
 ## Support for .NET 6
+
 The LogAnalytics.Client project has been upgraded to .NET 6, and bumped the major version to 6.x. 
 
 LogAnalytics.Client currently support the below versions of .NET.
@@ -25,21 +29,25 @@ LogAnalytics.Client currently support the below versions of .NET.
 ### Installing the package
 
 #### Install with the dotnet CLI
+
 ```
 dotnet add package LogAnalytics.Client
 ```
 
 #### Install with NuGet Package Manager
+
 ```
 Install-Package LogAnalytics.Client
 ```
 
 #### Install by adding a PackageReference to csproj
+
 ```xml
-<PackageReference Include="LogAnalytics.Client" Version="6.2.1" />
+<PackageReference Include="LogAnalytics.Client" Version="6.2.2" />
 ```
 
 #### Install using Paket CLI
+
 ```
 paket add LogAnalytics.Client
 ```
@@ -54,6 +62,7 @@ LogAnalyticsClient logger = new LogAnalyticsClient(
 ```
 
 ### Send a single log entry
+
 Synchronous execution (non-HTTP applications):
 ```csharp
 logger.SendLogEntry(new TestEntity
@@ -82,6 +91,7 @@ await logger.SendLogEntry(new TestEntity
 ```
 
 ### Send a batch of log entries with one request
+
 If you need to send a lot of log entries at once, it makes better sense to send them as a batch/collection instead of sending them one by one. This saves on requests, resources and eventually costs. 
 
 ```csharp
@@ -125,6 +135,7 @@ The available sovereign clouds are currently:
 If you want to develop the project locally and enhance it with your custom logic, or want to contribute to the GitHub repository with a PR, it's a good idea to verify that the code works and tests are flying. 
 
 ### Configure Tests secrets
+
 If you want to develop and run local tests, it is a good idea to set up your custom Log Analytics Workspace Id and Key in the project. This can be done using user secrets.
 
 Using the `dotnet` CLI from the `LogAnalyticsClient.Tests` project directory:
@@ -136,7 +147,8 @@ dotnet user-secrets set "LawServicePrincipalCredentials:ClientSecret" "CLIENT SE
 dotnet user-secrets set "LawServicePrincipalCredentials:Domain" "TENANT NAME OR DOMAIN ID HERE"
 ``` 
 
-You should now have a `secrets.json` file in your local project, with contents similar to this: 
+You should now have a `secrets.json` file in your local project, with contents similar to this:
+
 ```json
 {
   "LawConfiguration": {
@@ -152,6 +164,7 @@ You should now have a `secrets.json` file in your local project, with contents s
 ```
 
 #### Where can I get the credentials?
+
 To add the secrets with the correct values, you need to add the Workspace Id (LawId), and the Key. 
 You can find these from the Log Analytics Workspace in the Azure Portal, for example.
 
@@ -166,6 +179,7 @@ Read more about configuring user secrets in .NET Core projects: https://docs.mic
 This project is a spin-off from code samples. The examples and usage grew over time, and an interest was shown of a wrapper or client for Log Analytics.
 
 Related blog posts:
+
 - https://zimmergren.net/building-custom-data-collectors-for-azure-log-analytics/
 - https://zimmergren.net/log-custom-application-security-events-log-analytics-ingested-in-azure-sentinel/
 
