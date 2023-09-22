@@ -1,6 +1,7 @@
 ﻿using LogAnalytics.Client.UnitTests.TestEntities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace LogAnalytics.Client.UnitTests
@@ -63,10 +64,10 @@ namespace LogAnalytics.Client.UnitTests
             LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
-            void act() => client.SendLogEntries<ValidTestEntity>(null, "logtype").Wait();
+            async Task act() => await client.SendLogEntries<ValidTestEntity>(null, "logtype");
 
             // Assert.
-            Assert.Throws<AggregateException>(act);
+            Assert.ThrowsAsync<AggregateException>(act);
         }
 
         [Fact]
@@ -89,10 +90,10 @@ namespace LogAnalytics.Client.UnitTests
             LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
 
             // Act.
-            void act() => client.SendLogEntries<ValidTestEntity>(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ").Wait();
+            async Task act() => await client.SendLogEntries(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ");
 
             // Assert.
-            Assert.Throws<AggregateException>(act);            
+            Assert.ThrowsAsync<AggregateException>(act);            
         }
 
         [Theory]
