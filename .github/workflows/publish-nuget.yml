@@ -10,7 +10,7 @@ jobs:
     name: Integration Tests
     runs-on: windows-latest
     steps:
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.100
       - uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
     name: Unit Tests
     runs-on: windows-latest
     steps:
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.100
       - uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
     - name: DevSkim
       uses: microsoft/DevSkim-Action@v1
     - name: Wire up .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.100
     - name: Install dependencies
