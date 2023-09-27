@@ -5,7 +5,7 @@ Construct a custom object and send it to Log Analytics. It will be represented a
 
 ## Build Status
 [![CI - Integration Tests](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/publish-nuget.yml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/publish-nuget.yml)
-[![CodeQL](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/github-code-scanning/codeql)
 [![Defender for DevOps - GitHub](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/defenderfordevops.yaml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/defenderfordevops.yaml)
 
 ## NuGet
