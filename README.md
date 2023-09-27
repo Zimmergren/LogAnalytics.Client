@@ -4,9 +4,9 @@ The easiest way to send logs to Azure Log Analytics from your apps.
 Construct a custom object and send it to Log Analytics. It will be represented as a log entry in the logs. This helps make logging easy in your applications, and you can focus on more important business logic.
 
 ## Build Status
-
-[![CI - Integration Tests - NuGet](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CI/badge.svg)](https://www.nuget.org/packages/loganalytics.client)
-![CodeQL - Code Security](https://github.com/Zimmergren/LogAnalytics.Client/workflows/CodeQL/badge.svg)
+[![CI - Integration Tests](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/publish-nuget.yml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/publish-nuget.yml)
+[![CodeQL](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/codeql-analysis.yml)
+[![Defender for DevOps - GitHub](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/defenderfordevops.yaml/badge.svg)](https://github.com/Zimmergren/LogAnalytics.Client/actions/workflows/defenderfordevops.yaml)
 
 ## NuGet
 
