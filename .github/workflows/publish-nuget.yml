@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.100
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.IntegrationTests
         env: 
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.100
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
       - run: dotnet test
         working-directory: LogAnalytics.Client/LogAnalytics.Client.UnitTests
   buildandpublish:
@@ -40,7 +40,7 @@ jobs:
     needs: [unittests,integrationtests] # ensure we run the unit tests, and integration tests before we start building and packaging.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v4
     - name: DevSkim
       uses: microsoft/DevSkim-Action@v1
     - name: Wire up .NET Core
