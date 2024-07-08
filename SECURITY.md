@@ -7,6 +7,7 @@ We apply regular- and security-updates as applicable to the latest version of Lo
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 6.2.3   | :white_check_mark: |
 | 6.2.2   | :white_check_mark: |
 | 6.2.1   | :white_check_mark: |
 | 6.1.3   | :white_check_mark: |
