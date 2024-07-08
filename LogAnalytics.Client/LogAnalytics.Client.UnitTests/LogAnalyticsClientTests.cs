@@ -58,7 +58,7 @@ namespace LogAnalytics.Client.UnitTests
         }
 
         [Fact]
-        public void SendLogEntries_ThrowsAggregateException_IfEntityIsNull()
+        public async Task SendLogEntries_ThrowsArgumentNullExceptionException_IfEntityIsNull()
         {
             // Arrange.
             LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
@@ -67,7 +67,7 @@ namespace LogAnalytics.Client.UnitTests
             async Task act() => await client.SendLogEntries<ValidTestEntity>(null, "logtype");
 
             // Assert.
-            Assert.ThrowsAsync<AggregateException>(act);
+            await Assert.ThrowsAsync<ArgumentNullException>(act);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace LogAnalytics.Client.UnitTests
         }
 
         [Fact]
-        public void SendLogEntries_ThrowsArgumentOutOfRangeException_IfLogTypeLengthIsExceeded()
+        public async Task SendLogEntries_ThrowsArgumentOutOfRangeException_IfLogTypeLengthIsExceeded()
         {
             // Arrange.
             LogAnalyticsClient client = new LogAnalyticsClient("id", "bXlTaGFyZWRLZXk=");
@@ -93,7 +93,7 @@ namespace LogAnalytics.Client.UnitTests
             async Task act() => await client.SendLogEntries(new List<ValidTestEntity>() { new ValidTestEntity() }, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeaaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeZ");
 
             // Assert.
-            Assert.ThrowsAsync<AggregateException>(act);            
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(act);            
         }
 
         [Theory]
