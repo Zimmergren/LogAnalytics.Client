@@ -4,6 +4,7 @@
     /// Log Analytics Client Options.
     /// Defines settings for the Log Analytics Client.
     /// </summary>
+    [System.Obsolete("LogAnalytics.Client is deprecated. The underlying HTTP Data Collector API will be retired on 2026-09-14. Migrate to Azure.Monitor.Ingestion (LogsIngestionClient). See https://github.com/Zimmergren/LogAnalytics.Client for migration guidance.")]
     public class LogAnalyticsClientOptions
     {
         /// <summary>

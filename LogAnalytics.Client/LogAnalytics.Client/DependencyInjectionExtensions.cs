@@ -8,6 +8,7 @@ namespace LogAnalytics.Client
     /// <summary>
     /// Enables LogAnalyticsClient to be injected through Dependency Injection.
     /// </summary>
+    [System.Obsolete("LogAnalytics.Client is deprecated. The underlying HTTP Data Collector API will be retired on 2026-09-14. Migrate to Azure.Monitor.Ingestion (LogsIngestionClient). See https://github.com/Zimmergren/LogAnalytics.Client for migration guidance.")]
     public static class DependencyInjectionExtensions
     {
         /// <summary>

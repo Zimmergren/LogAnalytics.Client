@@ -9,8 +9,8 @@
 The easiest way to send logs to Azure Log Analytics from your .NET Core applications.</Description>
     <PackageProjectUrl>https://github.com/Zimmergren/LogAnalytics.Client</PackageProjectUrl>
     <PackageId>LogAnalytics.Client</PackageId>
-    <Version>6.2.3</Version>    
-    <PackageDescription>A .NET client for Azure Log Analytics. Compatible with .NET Core, .NET 5 and .NET 6</PackageDescription>
+    <Version>6.2.4</Version>    
+    <PackageDescription>DEPRECATED: The underlying Azure Monitor HTTP Data Collector API will be retired on 2026-09-14. Migrate to Azure.Monitor.Ingestion (LogsIngestionClient). See https://github.com/Zimmergren/LogAnalytics.Client for migration guidance.</PackageDescription>
     <RepositoryUrl>https://github.com/Zimmergren/LogAnalytics.Client</RepositoryUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>

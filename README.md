@@ -1,5 +1,13 @@
 # LogAnalytics Client for .NET Core
 
+> **⚠️ DEPRECATED — This package is no longer maintained.**
+>
+> The underlying [Azure Monitor HTTP Data Collector API has been deprecated by Microsoft](https://learn.microsoft.com/previous-versions/azure/azure-monitor/logs/data-collector-api) and **will stop functioning on 2026-09-14**.
+>
+> **Migrate to [`Azure.Monitor.Ingestion`](https://learn.microsoft.com/dotnet/api/overview/azure/monitor.ingestion-readme)** (`LogsIngestionClient`), which is the official replacement. See the [Migration Guide](#migration-guide) below.
+>
+> Version **6.2.4** is the final release of this package.
+
 The easiest way to send logs to Azure Log Analytics from your apps.
 Construct a custom object and send it to Log Analytics. It will be represented as a log entry in the logs. This helps make logging easy in your applications, and you can focus on more important business logic.
 
@@ -11,6 +19,8 @@ Construct a custom object and send it to Log Analytics. It will be represented a
 ## NuGet
 
 The [LogAnalytics.Client](https://www.nuget.org/packages/loganalytics.client) is available on NuGet.
+
+> **Note:** This package is deprecated. The final release is version 6.2.4.
 
 ## Support for .NET 6
 
@@ -184,3 +194,77 @@ Related blog posts:
 - https://zimmergren.net/log-custom-application-security-events-log-analytics-ingested-in-azure-sentinel/
 
 Keeping it simple.
+
+---
+
+## Migration Guide
+
+The HTTP Data Collector API that `LogAnalytics.Client` wraps is deprecated and will be retired on **2026-09-14**. The replacement is the **[Logs Ingestion API](https://learn.microsoft.com/azure/azure-monitor/logs/logs-ingestion-api-overview)**, with an official .NET SDK: **[`Azure.Monitor.Ingestion`](https://learn.microsoft.com/dotnet/api/overview/azure/monitor.ingestion-readme)**.
+
+### What changed
+
+| | LogAnalytics.Client (old) | Azure.Monitor.Ingestion (new) |
+|---|---|---|
+| **Auth** | Workspace Shared Key (HMAC) | Microsoft Entra ID (OAuth2 / `DefaultAzureCredential`) |
+| **Endpoint** | `{workspaceId}.ods.opinsights.azure.com` | Data Collection Rule endpoint or DCE |
+| **Config** | Workspace ID + Shared Key | DCR ID + Stream Name + Endpoint URI |
+| **Table targeting** | `Log-Type` header | DCR stream declarations |
+
+### Prerequisites
+
+Before migrating your code, you need to set up Azure-side resources:
+
+1. **Create a custom table** (or use a supported Azure table) in your Log Analytics workspace.
+2. **Create a Data Collection Rule (DCR)** that maps your incoming data to the target table.
+3. **Register an app in Microsoft Entra ID** (or use a managed identity) and grant it the *Monitoring Metrics Publisher* role on the DCR.
+
+See the full walkthrough: [Tutorial: Send data to Azure Monitor Logs with Logs ingestion API](https://learn.microsoft.com/azure/azure-monitor/logs/tutorial-logs-ingestion-api).
+
+### Before (LogAnalytics.Client)
+
+```csharp
+using LogAnalytics.Client;
+
+var logger = new LogAnalyticsClient(
+    workspaceId: "your-workspace-id",
+    sharedKey: "your-shared-key");
+
+await logger.SendLogEntry(new MyEntity
+{
+    Message = "Hello",
+    Severity = "Info"
+}, "MyCustomLog");
+```
+
+### After (Azure.Monitor.Ingestion)
+
+```csharp
+using Azure.Identity;
+using Azure.Monitor.Ingestion;
+
+var endpoint = new Uri("https://<your-dce>.ingest.monitor.azure.com");
+var client = new LogsIngestionClient(endpoint, new DefaultAzureCredential());
+
+var entries = new[]
+{
+    new { TimeGenerated = DateTime.UtcNow, Message = "Hello", Severity = "Info" }
+};
+
+await client.UploadAsync(
+    ruleId: "<dcr-immutable-id>",
+    streamName: "Custom-MyCustomLog",
+    entries);
+```
+
+### Install the new packages
+
+```
+dotnet add package Azure.Monitor.Ingestion
+dotnet add package Azure.Identity
+```
+
+### Further reading
+
+- [Logs Ingestion API overview](https://learn.microsoft.com/azure/azure-monitor/logs/logs-ingestion-api-overview)
+- [Azure.Monitor.Ingestion SDK reference](https://learn.microsoft.com/dotnet/api/overview/azure/monitor.ingestion-readme)
+- [Tutorial: Send data using Logs ingestion API](https://learn.microsoft.com/azure/azure-monitor/logs/tutorial-logs-ingestion-code)
